@@ -738,7 +738,7 @@ document
 $("contactPhone").addEventListener("input", function () {
 
     this.value =
-        this.value.replace(/\D/g, "").slice(0,10);
+        this.value.replace(/\D/g, "").slice(0, 10);
 
     feedback.phone = this.value;
 
@@ -805,6 +805,77 @@ function validateDetailPage() {
 }
 
 /* ==========================================
+   Compress Image
+========================================== */
+
+async function compressImage(file) {
+
+    const MAX_SIZE = 1600;
+    const QUALITY = 0.80;
+
+    const image = await createImageBitmap(file);
+
+    let width = image.width;
+    let height = image.height;
+
+    if (width > MAX_SIZE || height > MAX_SIZE) {
+
+        const ratio = Math.min(
+            MAX_SIZE / width,
+            MAX_SIZE / height
+        );
+
+        width = Math.round(width * ratio);
+        height = Math.round(height * ratio);
+
+    }
+
+    const canvas = document.createElement("canvas");
+
+    canvas.width = width;
+    canvas.height = height;
+
+    const ctx = canvas.getContext("2d");
+
+    ctx.drawImage(
+        image,
+        0,
+        0,
+        width,
+        height
+    );
+
+    image.close();
+
+    const blob = await new Promise(resolve => {
+
+        canvas.toBlob(
+            resolve,
+            "image/jpeg",
+            QUALITY
+        );
+
+    });
+
+    if (!blob) {
+
+        throw new Error(
+            "ไม่สามารถประมวลผลรูปภาพได้"
+        );
+
+    }
+
+    return new File(
+        [blob],
+        "compressed.jpg",
+        {
+            type: "image/jpeg"
+        }
+    );
+
+}
+
+/* ==========================================
    Image Preview
 ========================================== */
 
@@ -852,7 +923,7 @@ function previewImage() {
     ) {
 
         alert(
-`รองรับเฉพาะไฟล์
+            `รองรับเฉพาะไฟล์
 
 • JPG
 • PNG
@@ -1146,13 +1217,16 @@ async function submitFeedback() {
 
         }
 
+        const compressedFile =
+            await compressImage(feedback.imageFile);
+
         const base64 =
-            await fileToBase64(feedback.imageFile);
+            await fileToBase64(compressedFile);
 
         const upload =
             await uploadImage(
                 base64,
-                feedback.imageFile.type
+                compressedFile.type
             );
 
         if (!upload.success) {
