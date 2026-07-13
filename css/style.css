@@ -47,13 +47,15 @@ html{
 
     width:100%;
 
-    min-height:100%;
+    height:100%;
 
     margin:0;
 
     padding:0;
 
     overflow-x:hidden;
+
+    overflow-y:auto;
 
     -webkit-text-size-adjust:100%;
 
@@ -71,7 +73,7 @@ body{
 
     padding:0;
 
-    overflow-x:hidden;
+    overflow:visible;
 
     font-family:'Prompt',sans-serif;
 
@@ -109,17 +111,21 @@ body{
 
     width:100%;
 
-    max-width:100%;
+    min-height:100vh;
 
-    margin:0 auto;
+    display:flex;
 
-    padding:32px 20px;
+    justify-content:center;
+
+    align-items:center;
+
+    padding:40px 20px;
 
     position:relative;
 
     box-sizing:border-box;
 
-    overflow:visible;
+    overflow:hidden;
 
 }
 
@@ -188,13 +194,13 @@ body{
 
 #welcomePage{
 
+    width:100%;
+
     display:flex;
 
     justify-content:center;
 
     align-items:center;
-
-    min-height:calc(100vh - 40px);
 
 }
 
@@ -203,6 +209,10 @@ body{
 #detailPage,
 #reviewPage,
 #successPage{
+
+    width:100%;
+
+    display:none;
 
     padding-top:36px;
 
