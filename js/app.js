@@ -1221,20 +1221,29 @@ detailNextButton.addEventListener("click", () => {
 
     const locationLines = [];
 
-    if (feedback.department) {
+    const departmentName =
+        (feedback.department || "").trim();
+
+    const buildingName =
+        (feedback.buildingName || "").trim();
+
+    if (departmentName) {
 
         locationLines.push(
-            feedback.department
+            departmentName
         );
 
     }
 
     const buildingFloorParts = [];
 
-    if (feedback.buildingName) {
+    if (
+        buildingName &&
+        buildingName !== departmentName
+    ) {
 
         buildingFloorParts.push(
-            feedback.buildingName
+            buildingName
         );
 
     }
