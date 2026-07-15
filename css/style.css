@@ -1796,19 +1796,72 @@ button:disabled{
    Review Page
 ========================================================== */
 
+.review-page-card{
+
+    padding-top:24px;
+
+    padding-bottom:24px;
+
+}
+
+.review-title{
+
+    margin-bottom:6px;
+
+    font-size:24px;
+
+    font-weight:700;
+
+    color:#263238;
+
+}
+
+.review-description{
+
+    max-width:100%;
+
+    margin:0 auto 16px;
+
+    font-size:15px;
+
+    line-height:1.55;
+
+    color:#607D8B;
+
+}
+
+.review-summary-card{
+
+    width:100%;
+
+    padding:20px;
+
+    background:#F8FBFF;
+
+    border:2px solid #E3F2FD;
+
+    border-radius:18px;
+
+    text-align:left;
+
+}
+
 .review-badge{
 
     display:inline-flex;
+
     align-items:center;
+
     justify-content:center;
 
-    padding:8px 18px;
+    padding:7px 14px;
 
-    margin:6px auto 24px;
+    margin:0 0 14px;
 
     border-radius:999px;
 
     font-size:15px;
+
     font-weight:600;
 
     color:#37474F;
@@ -1820,6 +1873,7 @@ button:disabled{
 .review-badge.compliment{
 
     background:#E8F5E9;
+
     color:#2E7D32;
 
 }
@@ -1827,6 +1881,7 @@ button:disabled{
 .review-badge.suggestion{
 
     background:#FFF8E1;
+
     color:#F9A825;
 
 }
@@ -1834,109 +1889,168 @@ button:disabled{
 .review-badge.complaint{
 
     background:#FFEBEE;
+
     color:#C62828;
 
 }
 
-.review-divider{
+.review-location{
 
-    border:none;
+    margin-bottom:14px;
 
-    border-top:1px solid #ECEFF1;
-
-    margin:22px 0;
-
-}
-
-.review-item{
-
-    text-align:left;
-
-    margin-bottom:18px;
-
-    padding:2px 0;
-
-}
-
-.review-item:last-child{
-
-    margin-bottom:0;
-
-}
-
-.review-label{
-
-    margin-bottom:6px;
-
-    font-size:13px;
-
-    font-weight:500;
-
-    color:#90A4AE;
-
-}
-
-.review-value{
-
-    font-size:16px;
+    font-size:15px;
 
     font-weight:600;
 
-    line-height:1.8;
+    line-height:1.55;
 
-    color:#263238;
+    color:#455A64;
 
     word-break:break-word;
 
-    padding-left:2px;
+    white-space:pre-line;
 
 }
 
 .review-detail{
 
-    white-space:pre-wrap;
+    margin-bottom:16px;
+
+    font-size:16px;
 
     font-weight:400;
 
+    line-height:1.65;
+
+    color:#263238;
+
+    white-space:pre-wrap;
+
+    word-break:break-word;
+
 }
 
-.review-image-simple{
+.review-contact{
 
-    margin-top:10px;
+    font-size:14px;
 
-    text-align:center;
+    font-weight:600;
+
+    line-height:1.5;
+
+    color:#546E7A;
+
+}
+
+.review-contact-detail{
+
+    display:flex;
+
+    gap:12px;
+
+    flex-wrap:wrap;
+
+    margin-top:5px;
+
+    font-size:15px;
+
+    font-weight:500;
+
+    line-height:1.6;
+
+    color:#263238;
+
+}
+
+.review-contact-dot{
 
     color:#90A4AE;
 
 }
 
-.review-image-simple img{
+.review-button-group{
 
-    width:100%;
-
-    display:block;
-
-    border-radius:16px;
-
-    box-shadow:0 8px 24px rgba(0,0,0,.08);
+    margin-top:18px !important;
 
 }
 
-#reviewContactDetail{
+#reviewBackButton{
 
-    margin-top:18px;
-
-}
-
-#reviewContactDetail .review-item{
-
-    margin-bottom:14px;
+    font-size:16px;
 
 }
 
-#reviewPage .button-group{
+#submitButton{
 
-    margin-top:34px;
+    font-size:18px;
+
+    font-weight:700;
+
+}
+
+@media (max-width:480px){
+
+    .review-page-card{
+
+        padding:22px 18px;
+
+    }
+
+    .review-title{
+
+        font-size:22px;
+
+    }
+
+    .review-description{
+
+        margin-bottom:14px;
+
+        font-size:14px;
+
+    }
+
+    .review-summary-card{
+
+        padding:17px;
+
+    }
+
+    .review-location{
+
+        margin-bottom:12px;
+
+        font-size:14px;
+
+    }
+
+    .review-detail{
+
+        margin-bottom:14px;
+
+        font-size:15px;
+
+        line-height:1.6;
+
+    }
+
+    .review-button-group{
+
+        gap:8px;
+
+    }
+
+    #reviewBackButton{
+
+        font-size:14px;
+
+    }
+
+    #submitButton{
+
+        font-size:16px;
+
+    }
 
 }
 
