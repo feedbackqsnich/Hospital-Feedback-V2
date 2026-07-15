@@ -11,8 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
 
@@ -20,861 +19,679 @@
 
 <body>
 
-<div class="background">
+    <div class="background">
 
-    <!-- Welcome -->
+        <!-- Welcome -->
 
-    <div id="welcomePage">
+        <div id="welcomePage">
 
-    <div class="page-card">
+            <div class="page-card">
 
-        <img id="logo" class="logo">
+                <img id="logo" class="logo">
 
-        <h1 id="appName"></h1>
+                <h1 id="appName"></h1>
 
-        <h2 id="hospitalName"></h2>
+                <h2 id="hospitalName"></h2>
 
-        <p>
+                <p>
 
-            ทุกความคิดเห็นของท่านมีคุณค่า<br>
-            ช่วยให้เราพัฒนาการให้บริการได้ดียิ่งขึ้น
+                    ทุกความคิดเห็นของท่านมีคุณค่า<br>
+                    ช่วยให้เราพัฒนาการให้บริการได้ดียิ่งขึ้น
 
-        </p>
+                </p>
 
-        <button id="startButton">
+                <button id="startButton">
 
-            เริ่มต้นใช้งาน
+                    เริ่มต้นใช้งาน
 
-        </button>
+                </button>
 
-        <div class="privacy">
+                <div class="privacy">
 
-            🔒 ข้อมูลของท่านจะถูกเก็บรักษาเป็นความลับ
+                    🔒 ข้อมูลของท่านจะถูกเก็บรักษาเป็นความลับ
+
+                </div>
+
+                <div id="credit" class="credit"></div>
+
+            </div>
 
         </div>
 
-        <div id="credit" class="credit"></div>
+        <!-- Category -->
 
-    </div>
+        <div id="categoryPage" style="display:none;">
 
-</div>
+            <div class="page-card">
 
-    <!-- Category -->
+                <div class="step">
+                    ขั้นตอนที่ 1 จาก 4
+                </div>
 
-    <div id="categoryPage" style="display:none;">
+                <div class="step-progress">
+                    <div class="step-bar active"></div>
+                    <div class="step-bar"></div>
+                    <div class="step-bar"></div>
+                    <div class="step-bar"></div>
+                </div>
 
-    <div class="page-card">
+                <h2>
+                    เลือกประเภทความคิดเห็น
+                </h2>
 
-        <div class="step">
-            ขั้นตอนที่ 1 จาก 4
+                <p>
+                    กรุณาเลือกประเภทความคิดเห็นของท่าน
+                </p>
+
+                <div id="categoryContainer">
+
+                    <div class="category-card" data-value="compliment">
+
+                        <div class="category-content">
+
+                            <h3>😊 คำชม</h3>
+
+                            <small>
+                                ชื่นชมบุคลากรหรือการให้บริการ
+                            </small>
+
+                        </div>
+
+                        <div class="checkmark">✓</div>
+
+                    </div>
+
+                    <div class="category-card" data-value="suggestion">
+
+                        <div class="category-content">
+
+                            <h3>💡 ข้อเสนอแนะ</h3>
+
+                            <small>
+                                เสนอแนะแนวทางพัฒนาการให้บริการ
+                            </small>
+
+                        </div>
+
+                        <div class="checkmark">✓</div>
+
+                    </div>
+
+                    <div class="category-card" data-value="complaint">
+
+                        <div class="category-content">
+
+                            <h3>📢 ข้อร้องเรียน</h3>
+
+                            <small>
+                                แจ้งปัญหาการให้บริการ
+                            </small>
+
+                        </div>
+
+                        <div class="checkmark">✓</div>
+
+                    </div>
+
+                </div>
+
+                <div class="button-group">
+
+                    <button id="backButton" class="secondary">
+
+                        ‹ ย้อนกลับ
+
+                    </button>
+
+                    <button id="nextButton" disabled>
+
+                        ถัดไป ›
+
+                    </button>
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="step-progress">
-            <div class="step-bar active"></div>
-            <div class="step-bar"></div>
-            <div class="step-bar"></div>
-            <div class="step-bar"></div>
-        </div>
+        <!-- Location -->
+        <div id="locationPage" style="display:none;">
 
-        <h2>
-            เลือกประเภทความคิดเห็น
-        </h2>
+            <div class="page-card">
 
-        <p>
-            กรุณาเลือกประเภทความคิดเห็นของท่าน
-        </p>
+                <div class="step">
+                    ขั้นตอนที่ 2 จาก 4
+                </div>
 
-        <div id="categoryContainer">
+                <div class="step-progress">
+                    <div class="step-bar active"></div>
+                    <div class="step-bar active"></div>
+                    <div class="step-bar"></div>
+                    <div class="step-bar"></div>
+                </div>
 
-            <div class="category-card" data-value="compliment">
+                <h2>
+                    เลือกสถานที่ที่ต้องการแสดงความคิดเห็น
+                </h2>
 
-                <div class="category-content">
+                <p>
+                    กรุณาเลือกอาคาร และคลินิก หน่วยงาน
+                    หรือจุดที่ท่านต้องการแสดงความคิดเห็น
+                </p>
 
-                    <h3>😊 คำชม</h3>
+                <div class="form-group">
 
-                    <small>
-                        ชื่นชมบุคลากรหรือการให้บริการ
+                    <label>
+                        🏢 อาคาร <span style="color:#D32F2F;">*</span>
+                    </label>
+
+                    <select id="buildingSelect">
+
+                        <option value="">
+                            -- กรุณาเลือกอาคาร --
+                        </option>
+
+                    </select>
+
+                    <small id="buildingError" class="field-error" style="display:none;">
+
+                        กรุณาเลือกอาคาร
+
                     </small>
 
                 </div>
 
-                <div class="checkmark">✓</div>
+                <div id="floorSection" style="display:none;">
 
-            </div>
+                    <div class="form-group">
 
-            <div class="category-card" data-value="suggestion">
+                        <label>
 
-                <div class="category-content">
+                            📍 เลือกชั้นที่ใช้บริการ
+                            <span style="color:#D32F2F;">*</span>
 
-                    <h3>💡 ข้อเสนอแนะ</h3>
+                        </label>
 
-                    <small>
-                        เสนอแนะแนวทางพัฒนาการให้บริการ
-                    </small>
+                        <div id="floorContainer" class="floor-selector">
 
-                </div>
+                        </div>
 
-                <div class="checkmark">✓</div>
+                        <small id="floorError" class="field-error" style="display:none;">
 
-            </div>
+                            กรุณาเลือกชั้นที่ใช้บริการ
 
-            <div class="category-card" data-value="complaint">
-
-                <div class="category-content">
-
-                    <h3>📢 ข้อร้องเรียน</h3>
-
-                    <small>
-                        แจ้งปัญหาการให้บริการ
-                    </small>
-
-                </div>
-
-                <div class="checkmark">✓</div>
-
-            </div>
-
-        </div>
-
-        <div class="button-group">
-
-            <button
-                id="backButton"
-                class="secondary">
-
-                ‹ ย้อนกลับ
-
-            </button>
-
-            <button
-                id="nextButton"
-                disabled>
-
-                ถัดไป ›
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-    <!-- Location -->
-     <div id="locationPage" style="display:none;">
-
-    <div class="page-card">
-
-        <div class="step">
-            ขั้นตอนที่ 2 จาก 4
-        </div>
-
-        <div class="step-progress">
-            <div class="step-bar active"></div>
-            <div class="step-bar active"></div>
-            <div class="step-bar"></div>
-            <div class="step-bar"></div>
-        </div>
-
-        <h2>
-            เลือกสถานที่ที่ต้องการแสดงความคิดเห็น
-        </h2>
-
-        <p>
-            กรุณาเลือกอาคาร และคลินิก หน่วยงาน
-            หรือจุดที่ท่านต้องการแสดงความคิดเห็น
-        </p>
-
-        <div class="form-group">
-
-            <label>
-                🏢 อาคาร <span style="color:#D32F2F;">*</span>
-            </label>
-
-            <select id="buildingSelect">
-
-                <option value="">
-                    -- กรุณาเลือกอาคาร --
-                </option>
-
-            </select>
-
-            <small
-                id="buildingError"
-                class="field-error"
-                style="display:none;">
-
-                กรุณาเลือกอาคาร
-
-            </small>
-
-        </div>
-
-        <div id="floorSection" style="display:none;">
-
-            <div class="form-group">
-
-                <label>
-
-                    📍 เลือกชั้นที่ใช้บริการ
-                    <span style="color:#D32F2F;">*</span>
-
-                </label>
-
-                <div
-                    id="floorContainer"
-                    class="floor-selector">
-
-                </div>
-
-                <small
-                    id="floorError"
-                    class="field-error"
-                    style="display:none;">
-
-                    กรุณาเลือกชั้นที่ใช้บริการ
-
-                </small>
-
-            </div>
-
-        </div>
-
-        <div id="departmentSection" style="display:none;">
-
-            <div
-                id="loadingBox"
-                style="display:none;">
-
-                <div class="loading-spinner"></div>
-
-                <div class="loading-text">
-
-                    กำลังโหลดข้อมูล...
-
-                </div>
-
-                <div class="skeleton skeleton1"></div>
-
-                <div class="skeleton skeleton2"></div>
-
-                <div class="skeleton skeleton3"></div>
-
-            </div>
-
-            <div id="departmentContainer">
-
-            </div>
-
-            <small
-                id="departmentError"
-                class="field-error"
-                style="display:none;">
-
-                กรุณาเลือกคลินิก หน่วยงาน หรือจุดที่ต้องการแสดงความคิดเห็น
-
-            </small>
-
-            <div
-                id="otherDepartmentGroup"
-                class="form-group"
-                style="display:none;">
-
-                <label>
-
-                    ระบุหน่วยงาน
-                    <span style="color:#D32F2F;">*</span>
-
-                </label>
-
-                <input
-                    id="otherDepartment"
-                    type="text"
-                    placeholder="กรุณาระบุจุดที่ต้องการแสดงความคิดเห็น">
-
-                <small
-                    id="otherDepartmentError"
-                    class="field-error"
-                    style="display:none;">
-
-                    กรุณาระบุชื่อหน่วยงาน
-
-                </small>
-
-            </div>
-
-        </div>
-
-        <div class="button-group">
-
-            <button
-                id="locationBackButton"
-                class="secondary">
-
-                ย้อนกลับ
-
-            </button>
-
-            <button
-                id="locationNextButton">
-
-                ถัดไป
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-    <!-- Detail -->
-     <div id="detailPage" style="display:none;">
-
-    <div class="page-card">
-
-        <div class="step">
-            ขั้นตอนที่ 3 จาก 4
-        </div>
-
-        <div class="step-progress">
-            <div class="step-bar active"></div>
-            <div class="step-bar active"></div>
-            <div class="step-bar active"></div>
-            <div class="step-bar"></div>
-        </div>
-
-        <h2 id="detailTitle">
-            รายละเอียดความคิดเห็น
-        </h2>
-
-        <p id="detailDescription">
-            กรุณาระบุรายละเอียดความคิดเห็นของท่าน
-        </p>
-
-        <div id="summaryCard" class="summary-card">
-
-            <div class="summary-item">
-                <span>💬 ประเภท</span>
-                <strong id="summaryCategory">-</strong>
-            </div>
-
-            <div class="summary-item">
-                <span>🏢 อาคาร</span>
-                <strong id="summaryBuilding">-</strong>
-            </div>
-
-            <div class="summary-item">
-                <span>📍 ชั้น</span>
-                <strong id="summaryFloor">-</strong>
-            </div>
-
-            <div class="summary-item">
-                <span>📌 สถานที่</span>
-                <strong id="summaryDepartment">-</strong>
-            </div>
-
-        </div>
-
-        <div class="form-group">
-
-            <label id="detailLabel">
-                รายละเอียดความคิดเห็น
-                <span style="color:#D32F2F;">*</span>
-            </label>
-
-            <textarea
-                id="detailText"
-                rows="7"
-                maxlength="2000"
-                placeholder="กรุณาระบุรายละเอียดความคิดเห็นของท่าน"></textarea>
-
-            <small
-                id="detailError"
-                class="field-error"
-                style="display:none;">
-
-                กรุณาระบุรายละเอียดความคิดเห็น
-
-            </small>
-
-            <div class="text-counter">
-                <span id="detailCounter">0 / 2000</span>
-            </div>
-
-        </div>
-
-        <div class="form-group">
-
-            <label>
-                แนบรูปภาพ (ถ้ามี)
-            </label>
-
-            <label
-                class="upload-card"
-                for="imageInput">
-
-                <div class="upload-icon">
-                    📷
-                </div>
-
-                <div class="upload-title">
-                    แตะเพื่อเลือกรูปภาพ
-                </div>
-
-                <div class="upload-subtitle">
-                    JPG / PNG / HEIC<br>
-                    ไม่เกิน 10 MB
-                </div>
-
-            </label>
-
-            <input
-                id="imageInput"
-                type="file"
-                accept="image/*"
-                style="display:none;">
-
-            <div id="imagePreview"></div>
-
-            <div
-                id="imageModal"
-                class="image-modal"
-                style="display:none;">
-
-                <span
-                    id="closeImageModal"
-                    class="image-close">
-
-                    ✕
-
-                </span>
-
-                <img id="modalImage">
-
-            </div>
-
-            <button
-                id="removeImageButton"
-                type="button"
-                class="secondary"
-                style="display:none;margin-top:12px;width:100%;">
-
-                🗑️ ลบรูปภาพ
-
-            </button>
-
-        </div>
-
-        <div class="page-section">
-
-            <div class="section-title">
-                📞 การติดต่อกลับ
-            </div>
-
-            <div class="section-description">
-                หากต้องการให้เจ้าหน้าที่ติดต่อกลับ กรุณาเลือกด้านล่าง
-            </div>
-
-            <div class="contact-container">
-
-                <div class="contact-card" data-contact="no">
-
-                    <div class="category-content">
-
-                        <h3>ไม่ต้องการให้ติดต่อกลับ</h3>
-
-                        <small>
-                            ส่งความคิดเห็นแบบไม่ระบุตัวตน
                         </small>
 
                     </div>
 
-                    <div class="checkmark">✓</div>
-
                 </div>
 
-                <div class="contact-card" data-contact="yes">
+                <div id="departmentSection" style="display:none;">
 
-                    <div class="category-content">
+                    <div id="loadingBox" style="display:none;">
 
-                        <h3>ต้องการให้ติดต่อกลับ</h3>
+                        <div class="loading-spinner"></div>
+
+                        <div class="loading-text">
+
+                            กำลังโหลดข้อมูล...
+
+                        </div>
+
+                        <div class="skeleton skeleton1"></div>
+
+                        <div class="skeleton skeleton2"></div>
+
+                        <div class="skeleton skeleton3"></div>
 
                     </div>
 
-                    <div class="checkmark">✓</div>
+                    <div id="departmentContainer">
+
+                    </div>
+
+                    <small id="departmentError" class="field-error" style="display:none;">
+
+                        กรุณาเลือกคลินิก หน่วยงาน หรือจุดที่ต้องการแสดงความคิดเห็น
+
+                    </small>
+
+                    <div id="otherDepartmentGroup" class="form-group" style="display:none;">
+
+                        <label>
+
+                            ระบุหน่วยงาน
+                            <span style="color:#D32F2F;">*</span>
+
+                        </label>
+
+                        <input id="otherDepartment" type="text" placeholder="กรุณาระบุจุดที่ต้องการแสดงความคิดเห็น">
+
+                        <small id="otherDepartmentError" class="field-error" style="display:none;">
+
+                            กรุณาระบุชื่อหน่วยงาน
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <div class="button-group">
+
+                    <button id="locationBackButton" class="secondary">
+
+                        ย้อนกลับ
+
+                    </button>
+
+                    <button id="locationNextButton">
+
+                        ถัดไป
+
+                    </button>
 
                 </div>
 
             </div>
 
-            <small
-                id="contactError"
-                class="field-error"
-                style="display:none;">
-
-                กรุณาเลือกรูปแบบการติดต่อกลับ
-
-            </small>
-
         </div>
 
-        <div
-            id="contactForm"
-            style="display:none;">
+        <!-- Detail -->
+        <div id="detailPage" style="display:none;">
 
-            <div class="form-group">
+            <div class="page-card">
 
-                <label>
-                    ชื่อ-สกุล
-                    <span style="color:#D32F2F;">*</span>
-                </label>
+                <div class="step">
+                    ขั้นตอนที่ 3 จาก 4
+                </div>
 
-                <input
-                    id="contactName"
-                    type="text">
+                <div class="step-progress">
+                    <div class="step-bar active"></div>
+                    <div class="step-bar active"></div>
+                    <div class="step-bar active"></div>
+                    <div class="step-bar"></div>
+                </div>
 
-                <small
-                    id="nameError"
-                    class="field-error"
-                    style="display:none;">
+                <h2 id="detailTitle">
+                    รายละเอียดความคิดเห็น
+                </h2>
 
-                    กรุณากรอกชื่อ-สกุล
+                <p id="detailDescription">
+                    กรุณาระบุรายละเอียดความคิดเห็นของท่าน
+                </p>
 
-                </small>
+                <div id="summaryCard" class="summary-card">
+
+                    <div class="summary-item">
+                        <span>💬 ประเภท</span>
+                        <strong id="summaryCategory">-</strong>
+                    </div>
+
+                    <div class="summary-item">
+                        <span>🏢 อาคาร</span>
+                        <strong id="summaryBuilding">-</strong>
+                    </div>
+
+                    <div class="summary-item">
+                        <span>📍 ชั้น</span>
+                        <strong id="summaryFloor">-</strong>
+                    </div>
+
+                    <div class="summary-item">
+                        <span>📌 สถานที่</span>
+                        <strong id="summaryDepartment">-</strong>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label id="detailLabel">
+                        รายละเอียดความคิดเห็น
+                        <span style="color:#D32F2F;">*</span>
+                    </label>
+
+                    <textarea id="detailText" rows="7" maxlength="2000"
+                        placeholder="กรุณาระบุรายละเอียดความคิดเห็นของท่าน"></textarea>
+
+                    <small id="detailError" class="field-error" style="display:none;">
+
+                        กรุณาระบุรายละเอียดความคิดเห็น
+
+                    </small>
+
+                    <div class="text-counter">
+                        <span id="detailCounter">0 / 2000</span>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+                        แนบรูปภาพ (ถ้ามี)
+                    </label>
+
+                    <label class="upload-card" for="imageInput">
+
+                        <div class="upload-icon">
+                            📷
+                        </div>
+
+                        <div class="upload-title">
+                            แตะเพื่อเลือกรูปภาพ
+                        </div>
+
+                        <div class="upload-subtitle">
+                            JPG / PNG / HEIC<br>
+                            ไม่เกิน 10 MB
+                        </div>
+
+                    </label>
+
+                    <input id="imageInput" type="file" accept="image/*" style="display:none;">
+
+                    <div id="imagePreview"></div>
+
+                    <div id="imageModal" class="image-modal" style="display:none;">
+
+                        <span id="closeImageModal" class="image-close">
+
+                            ✕
+
+                        </span>
+
+                        <img id="modalImage">
+
+                    </div>
+
+                    <button id="removeImageButton" type="button" class="secondary"
+                        style="display:none;margin-top:12px;width:100%;">
+
+                        🗑️ ลบรูปภาพ
+
+                    </button>
+
+                </div>
+
+                <div class="page-section">
+
+                    <div class="section-title">
+                        📞 การติดต่อกลับ
+                    </div>
+
+                    <div class="section-description">
+                        หากต้องการให้เจ้าหน้าที่ติดต่อกลับ กรุณาเลือกด้านล่าง
+                    </div>
+
+                    <div class="contact-container">
+
+                        <div class="contact-card" data-contact="no">
+
+                            <div class="category-content">
+
+                                <h3>ไม่ต้องการให้ติดต่อกลับ</h3>
+
+                                <small>
+                                    ส่งความคิดเห็นแบบไม่ระบุตัวตน
+                                </small>
+
+                            </div>
+
+                            <div class="checkmark">✓</div>
+
+                        </div>
+
+                        <div class="contact-card" data-contact="yes">
+
+                            <div class="category-content">
+
+                                <h3>ต้องการให้ติดต่อกลับ</h3>
+
+                            </div>
+
+                            <div class="checkmark">✓</div>
+
+                        </div>
+
+                    </div>
+
+                    <small id="contactError" class="field-error" style="display:none;">
+
+                        กรุณาเลือกรูปแบบการติดต่อกลับ
+
+                    </small>
+
+                </div>
+
+                <div id="contactForm" style="display:none;">
+
+                    <div class="form-group">
+
+                        <label>
+                            ชื่อ-สกุล
+                            <span style="color:#D32F2F;">*</span>
+                        </label>
+
+                        <input id="contactName" type="text">
+
+                        <small id="nameError" class="field-error" style="display:none;">
+
+                            กรุณากรอกชื่อ-สกุล
+
+                        </small>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>
+                            เบอร์โทรศัพท์
+                            <span style="color:#D32F2F;">*</span>
+                        </label>
+
+                        <input id="contactPhone" type="tel" maxlength="10" inputmode="numeric" placeholder="08xxxxxxxx">
+
+                        <small id="phoneError" class="field-error" style="display:none;">
+
+                            กรุณากรอกหมายเลขโทรศัพท์ให้ครบ 10 หลัก
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <div class="button-group">
+
+                    <button id="detailBackButton" class="secondary">
+
+                        ‹ ย้อนกลับ
+
+                    </button>
+
+                    <button id="detailNextButton">
+
+                        ถัดไป ›
+
+                    </button>
+
+                </div>
 
             </div>
 
-            <div class="form-group">
+        </div>
 
-                <label>
-                    เบอร์โทรศัพท์
-                    <span style="color:#D32F2F;">*</span>
-                </label>
+        <!-- Review -->
+        <div id="reviewPage" style="display:none;">
 
-                <input
-                    id="contactPhone"
-                    type="tel"
-                    maxlength="10"
-                    inputmode="numeric"
-                    placeholder="08xxxxxxxx">
+            <div class="page-card review-page-card">
 
-                <small
-                    id="phoneError"
-                    class="field-error"
-                    style="display:none;">
+                <div class="step">
+                    ขั้นตอนที่ 4 จาก 4
+                </div>
 
-                    กรุณากรอกหมายเลขโทรศัพท์ให้ครบ 10 หลัก
+                <div class="step-progress">
+                    <div class="step-bar active"></div>
+                    <div class="step-bar active"></div>
+                    <div class="step-bar active"></div>
+                    <div class="step-bar active"></div>
+                </div>
 
-                </small>
+                <h2 class="review-title">
+                    ตรวจสอบข้อมูลก่อนส่ง
+                </h2>
+
+                <p class="review-description">
+                    กรุณาตรวจสอบข้อมูล<br>
+                    หากถูกต้อง กด “ส่งความคิดเห็น”
+                </p>
+
+                <div class="review-summary-card">
+
+                    <div id="reviewCategory" class="review-badge">
+
+                        🟡 ข้อเสนอแนะ
+
+                    </div>
+
+                    <div id="reviewLocation" class="review-location">
+
+                    </div>
+
+                    <div id="reviewDetail" class="review-detail">
+
+                    </div>
+
+                    <div id="reviewContact" class="review-contact">
+
+                    </div>
+
+                    <div id="reviewContactDetail" class="review-contact-detail" style="display:none;">
+
+                        <div id="reviewName"></div>
+
+                        <div id="reviewPhone"></div>
+
+                    </div>
+
+                </div>
+
+                <div class="button-group review-button-group">
+
+                    <button id="reviewBackButton" class="secondary">
+
+                        ‹ กลับไปแก้ไข
+
+                    </button>
+
+                    <button id="submitButton">
+
+                        ส่งความคิดเห็น
+
+                    </button>
+
+                </div>
 
             </div>
 
         </div>
 
-        <div class="button-group">
+        <div id="loadingOverlay" style="display:none;">
 
-            <button
-                id="detailBackButton"
-                class="secondary">
+            <div class="loading-card">
 
-                ‹ ย้อนกลับ
+                <div class="loading-spinner"></div>
 
-            </button>
+                <div class="loading-title">
 
-            <button
-                id="detailNextButton">
+                    กำลังบันทึกข้อมูล...
 
-                ถัดไป ›
+                </div>
 
-            </button>
+                <div class="loading-subtitle">
+
+                    โปรดอย่าปิดหน้าต่างนี้
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Success -->
+        <div id="successPage" style="display:none;">
+
+            <div class="page-card success-card">
+
+                <div class="success-icon">
+
+                    ✓
+
+                </div>
+
+                <h2 id="successTitle">
+
+                    ได้รับความคิดเห็นของท่านเรียบร้อยแล้ว
+
+                </h2>
+
+                <div id="successContactBox" style="display:none;">
+
+                    <div class="success-contact">
+
+                        ความคิดเห็นของท่านจะถูกนำไปใช้เป็นข้อมูลในการพัฒนาและปรับปรุงคุณภาพการให้บริการ
+
+                        <br><br>
+
+                        เจ้าหน้าที่จะตรวจสอบข้อมูลที่ท่านแจ้ง
+                        และดำเนินการติดต่อกลับภายใน
+                        3–7 วันทำการ
+                        ตามช่องทางการติดต่อที่ท่านได้ระบุไว้
+
+                        <br><br>
+
+                        ขอขอบคุณที่ร่วมเป็นส่วนหนึ่งในการพัฒนาสถาบันสุขภาพเด็กแห่งชาติมหาราชินี
+
+                    </div>
+
+                </div>
+
+                <div id="successThankBox">
+
+                    <div class="success-thank">
+
+                        ความคิดเห็นของท่านจะถูกนำไปใช้เป็นข้อมูลในการพัฒนาและปรับปรุงคุณภาพการให้บริการ
+
+                        <br><br>
+
+                        ขอขอบคุณที่ร่วมเป็นส่วนหนึ่งในการพัฒนาสถาบันสุขภาพเด็กแห่งชาติมหาราชินี
+
+                    </div>
+
+                </div>
+
+                <button id="restartButton">
+
+                    ส่งความคิดเห็นเพิ่มเติม
+
+                </button>
+
+            </div>
 
         </div>
 
     </div>
 
-</div>
-
-    <!-- Review -->
-     <div id="reviewPage" style="display:none;">
-
-    <div class="page-card">
-
-        <div class="step">
-            ขั้นตอนที่ 4 จาก 4
-        </div>
-
-        <div class="step-progress">
-            <div class="step-bar active"></div>
-            <div class="step-bar active"></div>
-            <div class="step-bar active"></div>
-            <div class="step-bar active"></div>
-        </div>
-
-        <h2>
-            ตรวจสอบข้อมูลก่อนส่ง
-        </h2>
-
-        <p>
-            กรุณาตรวจสอบข้อมูลให้ถูกต้องก่อนกดส่ง
-        </p>
-
-        <div
-            id="reviewCategory"
-            class="review-badge">
-
-            🟡 ข้อเสนอแนะ
-
-        </div>
-
-        <hr class="review-divider">
-
-        <div class="review-item">
-
-            <div class="review-label">
-                อาคาร
-            </div>
-
-            <div
-                id="reviewBuilding"
-                class="review-value">
-
-            </div>
-
-        </div>
-
-        <div class="review-item">
-
-            <div class="review-label">
-                ชั้น
-            </div>
-
-            <div
-                id="reviewFloor"
-                class="review-value">
-
-            </div>
-
-        </div>
-
-        <div class="review-item">
-
-            <div class="review-label">
-                สถานที่
-            </div>
-
-            <div
-                id="reviewDepartment"
-                class="review-value">
-
-            </div>
-
-        </div>
-
-        <hr class="review-divider">
-
-        <div class="review-item">
-
-            <div class="review-label">
-                รายละเอียด
-            </div>
-
-            <div
-                id="reviewDetail"
-                class="review-value review-detail">
-
-            </div>
-
-        </div>
-
-        <hr class="review-divider">
-
-        <div class="review-item">
-
-            <div class="review-label">
-                การติดต่อกลับ
-            </div>
-
-            <div
-                id="reviewContact"
-                class="review-value">
-
-            </div>
-
-        </div>
-
-        <div
-            id="reviewContactDetail"
-            style="display:none;">
-
-            <div class="review-item">
-
-                <div class="review-label">
-                    ชื่อ
-                </div>
-
-                <div
-                    id="reviewName"
-                    class="review-value">
-
-                </div>
-
-            </div>
-
-            <div class="review-item">
-
-                <div class="review-label">
-                    เบอร์โทรศัพท์
-                </div>
-
-                <div
-                    id="reviewPhone"
-                    class="review-value">
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <hr class="review-divider">
-
-        <div class="review-item">
-
-            <div class="review-label">
-                รูปภาพ
-            </div>
-
-            <div
-                id="reviewImage"
-                class="review-image-simple">
-
-                ไม่ได้แนบรูปภาพ
-
-            </div>
-
-        </div>
-
-        <div class="button-group">
-
-            <button
-                id="reviewBackButton"
-                class="secondary">
-
-                ย้อนกลับ
-
-            </button>
-
-            <button
-                id="submitButton">
-
-                ส่ง
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-<div
-    id="loadingOverlay"
-    style="display:none;">
-
-    <div class="loading-card">
-
-        <div class="loading-spinner"></div>
-
-        <div class="loading-title">
-
-            กำลังบันทึกข้อมูล...
-
-        </div>
-
-        <div class="loading-subtitle">
-
-            โปรดอย่าปิดหน้าต่างนี้
-
-        </div>
-
-    </div>
-
-</div>
-
-    <!-- Success -->
-     <div id="successPage" style="display:none;">
-
-    <div class="page-card success-card">
-
-        <div class="success-icon">
-
-            ✓
-
-        </div>
-
-        <h2 id="successTitle">
-
-            ได้รับความคิดเห็นของท่านเรียบร้อยแล้ว
-
-        </h2>
-
-        <div
-            id="successContactBox"
-            style="display:none;">
-
-            <div class="success-contact">
-
-                ความคิดเห็นของท่านจะถูกนำไปใช้เป็นข้อมูลในการพัฒนาและปรับปรุงคุณภาพการให้บริการ
-
-                <br><br>
-
-                เจ้าหน้าที่จะตรวจสอบข้อมูลที่ท่านแจ้ง
-                และดำเนินการติดต่อกลับภายใน
-                3–7 วันทำการ
-                ตามช่องทางการติดต่อที่ท่านได้ระบุไว้
-
-                <br><br>
-
-                ขอขอบคุณที่ร่วมเป็นส่วนหนึ่งในการพัฒนาสถาบันสุขภาพเด็กแห่งชาติมหาราชินี
-
-            </div>
-
-        </div>
-
-        <div id="successThankBox">
-
-            <div class="success-thank">
-
-                ความคิดเห็นของท่านจะถูกนำไปใช้เป็นข้อมูลในการพัฒนาและปรับปรุงคุณภาพการให้บริการ
-
-                <br><br>
-
-                ขอขอบคุณที่ร่วมเป็นส่วนหนึ่งในการพัฒนาสถาบันสุขภาพเด็กแห่งชาติมหาราชินี
-
-            </div>
-
-        </div>
-
-        <button id="restartButton">
-
-            ส่งความคิดเห็นเพิ่มเติม
-
-        </button>
-
-    </div>
-
-</div>
-
-</div>
-
-<script src="js/config.js"></script>
-<script src="js/helpers.js"></script>
-<script src="js/dom.js"></script>
-<script src="js/state.js"></script>
-<script src="js/ui.js"></script>
-<script src="js/api.js"></script>
-<script src="js/app.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/helpers.js"></script>
+    <script src="js/dom.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
 
 </body>
 
