@@ -961,12 +961,6 @@ function previewImage() {
                 style="cursor:zoom-in;">
         `;
 
-        $("reviewImage").innerHTML = `
-            <img
-                src="${e.target.result}"
-                class="review-preview-image">
-        `;
-
         imagePreview.querySelector("img").onclick = () => {
 
             $("modalImage").src = e.target.result;
@@ -1008,9 +1002,6 @@ function resetImage() {
     imageInput.value = "";
 
     imagePreview.innerHTML = "";
-
-    $("reviewImage").innerHTML = "";
-    $("reviewImage").textContent = "ไม่ได้แนบรูปภาพ";
 
     removeImageButton.style.display = "none";
 
@@ -1109,34 +1100,47 @@ detailNextButton.addEventListener("click", () => {
     $("reviewCategory").className =
         "review-badge " + info.className;
 
-    $("reviewBuilding").textContent =
-        feedback.buildingName;
+    const locationLines = [];
 
-    $("reviewFloor").textContent =
-        feedback.floor
-            ? `ชั้น ${feedback.floor}`
-            : "-";
+    if (feedback.department) {
 
-    $("reviewDepartment").textContent =
-        feedback.department;
+        locationLines.push(
+            feedback.department
+        );
+
+    }
+
+    const buildingFloorParts = [];
+
+    if (feedback.buildingName) {
+
+        buildingFloorParts.push(
+            feedback.buildingName
+        );
+
+    }
+
+    if (feedback.floor) {
+
+        buildingFloorParts.push(
+            `ชั้น ${feedback.floor}`
+        );
+
+    }
+
+    if (buildingFloorParts.length > 0) {
+
+        locationLines.push(
+            buildingFloorParts.join(" ")
+        );
+
+    }
+
+    $("reviewLocation").textContent =
+        locationLines.join("\n");
 
     $("reviewDetail").textContent =
         feedback.detail;
-
-    const preview =
-        $("imagePreview").querySelector("img");
-
-    if (preview) {
-
-        $("reviewImage").innerHTML =
-            `<img src="${preview.src}" alt="รูปภาพประกอบ">`;
-
-    } else {
-
-        $("reviewImage").textContent =
-            "ไม่ได้แนบรูปภาพ";
-
-    }
 
     if (feedback.needContact) {
 
@@ -1144,18 +1148,18 @@ detailNextButton.addEventListener("click", () => {
             "ต้องการให้เจ้าหน้าที่ติดต่อกลับ";
 
         $("reviewContactDetail").style.display =
-            "block";
+            "flex";
 
         $("reviewName").textContent =
-            feedback.name;
+            `คุณ ${feedback.name}`;
 
         $("reviewPhone").textContent =
-            feedback.phone;
+            `เบอร์ ${feedback.phone}`;
 
     } else {
 
         $("reviewContact").textContent =
-            "ไม่ต้องการให้ติดต่อกลับ (ไม่ระบุตัวตน)";
+            "ไม่ต้องการให้เจ้าหน้าที่ติดต่อกลับ";
 
         $("reviewContactDetail").style.display =
             "none";
