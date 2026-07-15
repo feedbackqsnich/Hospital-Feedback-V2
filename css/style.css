@@ -2569,50 +2569,83 @@ button:disabled{
 }
 
 /* ==========================================================
-   Success Icon Animation
+   Success Mascot Animation
 ========================================================== */
 
-@keyframes successIconEnter {
+@keyframes successMascotEnter {
 
     0% {
 
-        opacity:0;
+        opacity: 0;
 
-        transform:scale(0.55);
+        transform:
+            translateY(14px)
+            scale(0.78);
 
     }
 
     65% {
 
-        opacity:1;
+        opacity: 1;
 
-        transform:scale(1.08);
+        transform:
+            translateY(-3px)
+            scale(1.04);
 
     }
 
     100% {
 
-        opacity:1;
+        opacity: 1;
 
-        transform:scale(1);
+        transform:
+            translateY(0)
+            scale(1);
 
     }
 
 }
 
-#successPage .success-icon {
+.success-mascot {
 
-    animation:successIconEnter 0.55s
+    display: block;
+
+    width: 115px;
+
+    height: auto;
+
+    margin: 0 auto 14px;
+
+}
+
+#successPage.page-enter .success-mascot {
+
+    animation:
+        successMascotEnter
+        0.6s
         cubic-bezier(0.34, 1.56, 0.64, 1)
-        0.15s both;
+        0.08s
+        both;
+
+}
+
+@media (max-width: 480px) {
+
+    .success-mascot {
+
+        width: 96px;
+
+        margin-bottom: 12px;
+
+    }
 
 }
 
 @media (prefers-reduced-motion: reduce) {
 
-    #successPage .success-icon {
+    #successPage.page-enter .success-mascot {
 
-        animation:none;
+        animation: none;
 
     }
 
@@ -2890,21 +2923,19 @@ button:disabled{
 
 .success-contact-notice {
 
-    width: 100%;
+    width: fit-content;
 
-    max-width: 500px;
+    max-width: 90%;
 
-    margin: 0 auto 24px;
+    margin: 22px auto 24px;
 
-    padding: 15px 22px;
+    padding: 13px 28px;
 
     background: #F3F9FF;
 
     border: 1px solid #D6EBFF;
 
-    border-left: 5px solid #42A5F5;
-
-    border-radius: 12px;
+    border-radius: 14px;
 
     text-align: center;
 
@@ -3005,6 +3036,84 @@ button:disabled{
     .success-desktop-lines:last-child {
 
         margin-bottom: 0;
+
+    }
+
+}
+
+/* ==========================================================
+   Category Mascot
+========================================================== */
+
+.category-mascot {
+
+    display: block;
+
+    width: 112px;
+
+    height: auto;
+
+    margin: -14px auto 16px;
+
+    animation:
+        categoryMascotEnter
+        0.55s
+        cubic-bezier(0.34, 1.56, 0.64, 1)
+        both;
+
+}
+
+@keyframes categoryMascotEnter {
+
+    0% {
+
+        opacity: 0;
+
+        transform:
+            translateY(12px)
+            scale(0.8);
+
+    }
+
+    70% {
+
+        opacity: 1;
+
+        transform:
+            translateY(-2px)
+            scale(1.04);
+
+    }
+
+    100% {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .category-mascot {
+
+        width: 96px;
+
+        margin: -12px auto 14px;
+
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .category-mascot {
+
+        animation: none;
 
     }
 
