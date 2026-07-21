@@ -473,16 +473,19 @@
                     <div class="form-group">
 
                         <label>
-                            ชื่อ-สกุล
+                            ชื่อ-สกุลผู้ปกครอง หรือ ชื่อ-สกุลผู้ป่วย / เลขประจำตัวโรงพยาบาล (HN)
                             <span style="color:#D32F2F;">*</span>
                         </label>
+
+                        <small class="field-description">
+                            ⓘ หากสะดวก
+                            โปรดระบุข้อมูลผู้ป่วยเพื่อช่วยให้เจ้าหน้าที่ค้นหาเหตุการณ์และตรวจสอบข้อมูลได้รวดเร็วยิ่งขึ้น
+                        </small>
 
                         <input id="contactName" type="text">
 
                         <small id="nameError" class="field-error" style="display:none;">
-
-                            กรุณากรอกชื่อ-สกุล
-
+                            กรุณากรอกข้อมูลให้ครบถ้วน
                         </small>
 
                     </div>
@@ -490,16 +493,14 @@
                     <div class="form-group">
 
                         <label>
-                            เบอร์โทรศัพท์
+                            เบอร์โทรศัพท์ผู้ปกครองที่ติดต่อได้
                             <span style="color:#D32F2F;">*</span>
                         </label>
 
                         <input id="contactPhone" type="tel" maxlength="10" inputmode="numeric" placeholder="08xxxxxxxx">
 
                         <small id="phoneError" class="field-error" style="display:none;">
-
                             กรุณากรอกหมายเลขโทรศัพท์ให้ครบ 10 หลัก
-
                         </small>
 
                     </div>
@@ -509,22 +510,20 @@
                 <div class="button-group">
 
                     <button id="detailBackButton" class="secondary">
-
                         ‹ ย้อนกลับ
-
                     </button>
 
                     <button id="detailNextButton">
-
                         ถัดไป ›
-
                     </button>
 
                 </div>
 
-            </div>
+            </div> <!-- page-card -->
 
-        </div>
+        </div> <!-- detailPage -->
+
+        <!-- Review -->
 
         <!-- Review -->
         <div id="reviewPage" style="display:none;">
