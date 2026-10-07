@@ -14,52 +14,84 @@ const API = {
 
 async function api(action, data = {}) {
 
-    const response = await fetch(API.WEBAPP, {
+    const controller = new AbortController();
 
-        method: "POST",
+    const timeout = setTimeout(() => {
+        controller.abort();
+    }, 30000);
 
-        headers: {
+    try {
 
-            "Content-Type": "application/json"
+        const response = await fetch(API.WEBAPP, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                action,
+                ...data
+            }),
+            signal: controller.signal
+        });
 
-        },
+        if (!response.ok) {
+            throw new Error(`เซิร์ฟเวอร์ตอบกลับผิดพลาด (${response.status})`);
+        }
 
-        body: JSON.stringify({
+        return await response.json();
 
-            action,
+    } catch (err) {
 
-            ...data
+        if (err.name === "AbortError") {
+            throw new Error("การเชื่อมต่อใช้เวลานานเกินไป กรุณาลองใหม่อีกครั้ง");
+        }
 
-        })
+        throw err;
 
-    });
+    } finally {
 
-    return await response.json();
+        clearTimeout(timeout);
 
+    }
 }
 
 /* ==========================================
    Preload Departments
 ========================================== */
 
+let departmentsPromise = null;
+
 async function preloadDepartments() {
 
-    if (departments.length) return;
-
-    try {
-
-        const result = await api("getLocationData");
-
-        departments = result.departments || [];
-
+    // ถ้ามีข้อมูลแล้ว ไม่ต้องเรียก API
+    if (departments.length) {
+        return departments;
     }
 
-    catch (err) {
-
-        console.error(err);
-
+    // ถ้ามี request กำลังโหลดอยู่ ให้รอ request เดิม
+    if (departmentsPromise) {
+        return departmentsPromise;
     }
 
+    departmentsPromise = api("getLocationData")
+        .then(result => {
+
+            departments = result.departments || [];
+
+            return departments;
+
+        })
+        .catch(err => {
+
+            console.error(err);
+
+            departmentsPromise = null;
+
+            throw err;
+
+        });
+
+    return departmentsPromise;
 }
 
 /* ==========================================

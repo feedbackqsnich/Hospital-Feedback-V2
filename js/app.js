@@ -170,9 +170,7 @@ el.nextButton.addEventListener("click", () => {
 
 });
 
-async function loadBuildings() {
-
-    await preloadDepartments();
+function loadBuildings() {
 
     resetLocationState();
 
@@ -198,7 +196,9 @@ async function loadBuildings() {
    Building Change
 ========================================== */
 
-el.buildingSelect.addEventListener("change", function () {
+el.buildingSelect.addEventListener("change", async function () {
+
+    await preloadDepartments();
 
     feedback.buildingId = this.value;
     feedback.buildingName = "";
@@ -216,6 +216,8 @@ el.buildingSelect.addEventListener("change", function () {
     $("otherDepartment").value = "";
     $("otherDepartmentError").style.display = "none";
     $("otherDepartment").classList.remove("input-error");
+
+    // ...ที่เหลือเหมือนเดิมทั้งหมด
 
     el.floorContainer.replaceChildren();
     el.departmentContainer.replaceChildren();
@@ -1342,15 +1344,15 @@ async function submitFeedback() {
     try {
 
         if (!feedback.imageFile) {
-
-            feedback.imageDriveId = "";
-            feedback.imageFileName = "";
-            feedback.imageSize = 0;
+            // ถ้าไม่มีไฟล์ใหม่ แต่มีรูปที่อัปโหลดไว้แล้ว
+            // ให้คงข้อมูลรูปเดิมไว้สำหรับการบันทึกซ้ำ
+            if (!feedback.imageDriveId) {
+                feedback.imageFileName = "";
+                feedback.imageSize = 0;
+            }
 
             saveFeedbackData();
-
             return;
-
         }
 
         const compressedFile =
