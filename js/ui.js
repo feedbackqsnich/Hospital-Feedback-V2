@@ -19,7 +19,7 @@ function hideLoading() {
 
     $("submitButton").disabled = false;
 
-    $("submitButton").innerHTML = "ส่ง";
+    $("submitButton").innerHTML = "ส่งความคิดเห็น";
 
 }
 
