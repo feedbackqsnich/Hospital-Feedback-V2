@@ -1,0 +1,74 @@
+/* ==========================================
+   LAYOUT
+========================================== */
+
+.container{
+
+    width:100%;
+
+    max-width:1280px;
+
+    margin:auto;
+
+    padding:32px 20px 60px;
+
+}
+
+.section{
+
+    margin-top:32px;
+
+}
+
+.card{
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius-lg);
+
+    box-shadow:var(--shadow-md);
+
+    padding:24px;
+
+}
+
+.card h3{
+
+    font-size:21px;
+
+    font-weight:600;
+
+    margin-bottom:20px;
+
+    color:var(--text);
+
+}
+
+.full-card{
+
+    margin-top:24px;
+
+}
+
+.section-divider{
+
+    border:none;
+
+    border-top:1px solid var(--border);
+
+    margin:32px 0;
+
+}
+
+/* ลดช่องว่างระหว่างกล่องความคิดเห็นกับ Footer */
+.feedback-section,
+.feedback-container {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+footer {
+    margin-top: 24px !important;
+}

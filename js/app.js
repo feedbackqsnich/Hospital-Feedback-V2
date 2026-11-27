@@ -1,1650 +1,1222 @@
-/* ==========================================
-   Page Animation
-========================================== */
 
-function animatePage(page) {
+// ==============================
+// วันที่และเวลา Real-time (เวลาไทย)
+// ==============================
 
-    if (!page) return;
+function updateRealTime() {
+    const now = new Date();
 
-    page.classList.remove("page-enter");
+    const dateElement = document.getElementById("lastUpdateDate");
+    const timeElement = document.getElementById("lastUpdateTime");
 
-    void page.offsetWidth;
+    const thaiDate = new Intl.DateTimeFormat("th-TH", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: "Asia/Bangkok"
+    }).format(now);
 
-    page.classList.add("page-enter");
+    const thaiTime = new Intl.DateTimeFormat("th-TH", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+        timeZone: "Asia/Bangkok"
+    }).format(now);
 
+    if (dateElement) dateElement.textContent = thaiDate;
+    if (timeElement) timeElement.textContent = `${thaiTime} น.`;
 }
-
-/* ==========================================
-   Welcome
-========================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
-
-    $("logo").src = CONFIG.LOGO_URL;
-
-    $("appName").textContent = CONFIG.APP_NAME;
-
-    $("hospitalName").textContent = CONFIG.HOSPITAL_NAME;
-
-    $("credit").innerHTML =
-        `${CONFIG.HOSPITAL_NAME}<br>
-        Version ${CONFIG.VERSION} | พ.ศ. ${CONFIG.YEAR}`;
-
-    preloadDepartments();
-
+    updateRealTime();
+    setInterval(updateRealTime, 20000);
+    init();
 });
 
-el.startButton.addEventListener("click", () => {
+let feedbackData = [];
 
-    el.welcomePage.style.display = "none";
+// ==============================
+// CACHE ปีงบประมาณ
+// ==============================
 
-    el.categoryPage.style.display = "block";
+const FISCAL_YEAR_CACHE_KEY = "selectedFiscalYear";
 
-    animatePage(el.categoryPage);
+function getCachedFiscalYear() {
+    return localStorage.getItem(FISCAL_YEAR_CACHE_KEY) || "all";
+}
 
-    scrollTopPage();
+function saveCachedFiscalYear(year) {
+    localStorage.setItem(FISCAL_YEAR_CACHE_KEY, year);
+}
 
-});
+// ========================================
+// FEEDBACK LIST STATE
+// ========================================
 
-/* ==========================================
-   Category Back
-========================================== */
+let feedbackCategoryFilter = "all";
+let feedbackSearchQuery = "";
+let feedbackDepartmentFilter = "all";
 
-$("backButton").addEventListener("click", () => {
+let currentFeedbackPage = 1;
+const FEEDBACK_PER_PAGE = 10;
 
-    $("categoryPage").style.display = "none";
+// ========================================
+// COUNT-UP ANIMATION
+// ========================================
 
-    $("welcomePage").style.display = "block";
+function animateCount(element, targetValue, duration = 700) {
+    if (!element) return;
 
-    animatePage($("welcomePage"));
+    const target = Number(targetValue) || 0;
+    const startTime = performance.now();
 
-    scrollTopPage();
+    if (element._countAnimationFrame) {
+        cancelAnimationFrame(element._countAnimationFrame);
+    }
 
-});
-
-/* ==========================================
-   Category
-========================================== */
-
-const cards = document.querySelectorAll(".category-card");
-
-cards.forEach(card => {
-
-    card.addEventListener("click", () => {
-
-        const newCategory = card.dataset.value;
-
-        if (
-            feedback.category &&
-            feedback.category !== newCategory
-        ) {
-
-            feedback.detail = "";
-            feedback.imageFile = null;
-            feedback.imageDriveId = "";
-            feedback.imageFileName = "";
-            feedback.imageSize = 0;
-
-            $("detailText").value = "";
-            $("detailCounter").textContent = "0 / 2000";
-
-            resetImage();
-
-        }
-
-        cards.forEach(c =>
-            c.classList.remove("selected")
+    function update(currentTime) {
+        const progress = Math.min(
+            (currentTime - startTime) / duration,
+            1
         );
 
-        card.classList.add("selected");
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const currentValue = Math.round(target * eased);
 
-        feedback.category = newCategory;
+        element.textContent = currentValue.toLocaleString("th-TH");
 
-        el.nextButton.disabled = false;
+        if (progress < 1) {
+            element._countAnimationFrame =
+                requestAnimationFrame(update);
+        } else {
+            element.textContent = target.toLocaleString("th-TH");
+            element._countAnimationFrame = null;
+        }
+    }
 
+    element._countAnimationFrame = requestAnimationFrame(update);
+}
+
+// ==============================
+// DASHBOARD LOADING
+// ==============================
+
+function setDashboardLoading() {
+    const summaryValues = document.querySelectorAll(
+        ".summary-card .summary-value"
+    );
+
+    summaryValues.forEach(element => {
+        element.innerHTML = `
+            <span class="loading-spinner"></span>
+        `;
     });
 
-});
+    const feedbackList = document.getElementById("feedbackPreviewList");
 
-/* ==========================================
-   Category Next
-========================================== */
-
-el.nextButton.addEventListener("click", () => {
-
-    feedback.buildingId = "";
-    feedback.buildingName = "";
-    feedback.floor = "";
-    feedback.department = "";
-
-    resetLocationState();
-
-    el.buildingSelect.value = "";
-
-    const locationTitle = $("locationPage").querySelector("h2");
-    const locationDescription = $("locationPage").querySelector("p");
-
-    switch (feedback.category) {
-
-        case "compliment":
-
-            locationTitle.textContent =
-                "เลือกสถานที่ที่ต้องการชื่นชม";
-
-            locationDescription.textContent =
-                "กรุณาเลือกอาคาร และคลินิก หน่วยงาน หรือจุดที่ท่านต้องการชื่นชม";
-
-            break;
-
-        case "suggestion":
-
-            locationTitle.textContent =
-                "เลือกสถานที่ที่ต้องการเสนอแนะแนวทาง";
-
-            locationDescription.textContent =
-                "กรุณาเลือกอาคาร และคลินิก หน่วยงาน หรือจุดที่ท่านต้องการเสนอแนะ";
-
-            break;
-
-        case "complaint":
-
-            locationTitle.textContent =
-                "เลือกสถานที่ที่ต้องการร้องเรียน";
-
-            locationDescription.textContent =
-                "กรุณาเลือกอาคาร และคลินิก หน่วยงาน หรือจุดที่ท่านต้องการร้องเรียน";
-
-            break;
-
-        default:
-
-            locationTitle.textContent =
-                "เลือกสถานที่ที่ต้องการแสดงความคิดเห็น";
-
-            locationDescription.textContent =
-                "กรุณาเลือกอาคาร และคลินิก หน่วยงาน หรือจุดที่ท่านต้องการแสดงความคิดเห็น";
-
+    if (feedbackList) {
+        feedbackList.innerHTML = `
+            <div class="dashboard-loading">
+                <span class="loading-spinner"></span>
+                <span>กำลังโหลดความคิดเห็น...</span>
+            </div>
+        `;
     }
 
-    loadBuildings();
+    document.querySelectorAll(".chart-wrapper").forEach(wrapper => {
+        if (wrapper.querySelector(".chart-loading")) return;
 
-});
+        wrapper.style.position = "relative";
 
-function loadBuildings() {
+        const loading = document.createElement("div");
+        loading.className = "dashboard-loading chart-loading";
 
-    resetLocationState();
-
-    el.categoryPage.style.display = "none";
-
-    el.locationPage.style.display = "block";
-
-    el.buildingSelect.innerHTML =
-        `<option value="">-- กรุณาเลือกอาคาร --</option>`;
-
-    buildings.forEach(item => {
-
-        el.buildingSelect.insertAdjacentHTML(
-            "beforeend",
-            `<option value="${item.id}">${item.name}</option>`
-        );
-
-    });
-
-}
-
-/* ==========================================
-   Building Change
-========================================== */
-
-el.buildingSelect.addEventListener("change", async function () {
-
-    await preloadDepartments();
-
-    feedback.buildingId = this.value;
-    feedback.buildingName = "";
-    feedback.floor = "";
-    feedback.department = "";
-
-    $("buildingError").style.display = "none";
-    $("floorError").style.display = "none";
-    $("departmentError").style.display = "none";
-
-    $("buildingSelect").classList.remove("input-error");
-    $("floorContainer").classList.remove("input-error");
-
-    $("otherDepartmentGroup").style.display = "none";
-    $("otherDepartment").value = "";
-    $("otherDepartmentError").style.display = "none";
-    $("otherDepartment").classList.remove("input-error");
-
-    // ...ที่เหลือเหมือนเดิมทั้งหมด
-
-    el.floorContainer.replaceChildren();
-    el.departmentContainer.replaceChildren();
-
-    el.floorSection.style.display = "none";
-    el.departmentSection.style.display = "none";
-
-    if (!feedback.buildingId) return;
-
-    feedback.buildingName =
-        this.options[this.selectedIndex].text;
-
-    if (feedback.buildingId === "5") {
-
-        feedback.department = feedback.buildingName;
-
-        return;
-
-    }
-
-    const floors = [...new Set(
-
-        departments
-            .filter(d =>
-                String(d.buildingId) ===
-                String(feedback.buildingId)
-            )
-            .map(d => d.floor)
-
-    )].sort((a, b) => Number(a) - Number(b));
-
-    if (!floors.length) return;
-
-    floors.forEach((floor, index) => {
-
-        const card = document.createElement("div");
-
-        card.className =
-            "floor-card location-item-enter";
-
-        card.style.setProperty(
-            "--item-delay",
-            `${Math.min(index * 45, 270)}ms`
-        );
-
-        card.textContent = `ชั้น ${floor}`;
-
-        card.onclick = function () {
-
-            document
-                .querySelectorAll(".floor-card")
-                .forEach(c =>
-                    c.classList.remove("selected")
-                );
-
-            this.classList.add("selected");
-
-            feedback.floor = floor;
-            feedback.department = "";
-
-            $("floorError").style.display = "none";
-            $("departmentError").style.display = "none";
-
-            $("floorContainer")
-                .classList.remove("input-error");
-
-            $("otherDepartmentGroup").style.display = "none";
-            $("otherDepartment").value = "";
-            $("otherDepartmentError").style.display = "none";
-            $("otherDepartment")
-                .classList.remove("input-error");
-
-            el.departmentContainer.replaceChildren();
-
-            renderDepartments(
-
-                departments.filter(d =>
-
-                    String(d.buildingId) ===
-                    String(feedback.buildingId) &&
-
-                    String(d.floor) ===
-                    String(floor)
-
-                )
-
-            );
-
-            el.departmentSection.style.display = "block";
-
-            animateLocationSection(
-                el.departmentSection
-            );
-
-        };
-
-        el.floorContainer.appendChild(card);
-
-    });
-
-    el.floorSection.style.display = "block";
-
-    animateLocationSection(
-        el.floorSection
-    );
-
-});
-
-/* ==========================================
-   Create Department Card
-========================================== */
-
-function createDepartmentCard(dep) {
-
-    const card = document.createElement("div");
-
-    card.className = "department-card";
-
-    card.innerHTML = `
-        <div class="department-name">${dep.name}</div>
-        <div class="department-check">✓</div>
-    `;
-
-    card.onclick = () => {
-
-        document
-            .querySelectorAll(".department-card")
-            .forEach(c => c.classList.remove("selected"));
-
-        card.classList.add("selected");
-
-        feedback.department = dep.name;
-
-        $("departmentError").style.display = "none";
-
-        $("otherDepartmentGroup").style.display = "none";
-
-        $("otherDepartment").value = "";
-
-        $("otherDepartmentError").style.display = "none";
-
-        $("otherDepartment").classList.remove("input-error");
-
-    };
-
-    return card;
-
-}
-
-/* ==========================================
-   Create Other Department Card
-========================================== */
-
-function createOtherDepartmentCard() {
-
-    const card = document.createElement("div");
-
-    card.className = "department-card";
-
-    card.innerHTML = `
-        <div class="department-name">อื่น ๆ</div>
-        <div class="department-check">✓</div>
-    `;
-
-    card.onclick = () => {
-
-        document
-            .querySelectorAll(".department-card")
-            .forEach(c => c.classList.remove("selected"));
-
-        card.classList.add("selected");
-
-        feedback.department = "";
-
-        $("departmentError").style.display = "none";
-
-        $("otherDepartmentGroup").style.display = "block";
-
-        $("otherDepartment").value = "";
-
-        $("otherDepartmentError").style.display = "none";
-
-        $("otherDepartment").classList.remove("input-error");
-
-        scrollToElement($("otherDepartment"));
-
-    };
-
-    return card;
-
-}
-
-/* ==========================================
-   Render Departments
-========================================== */
-
-function renderDepartments(list) {
-
-    const container = el.departmentContainer;
-
-    container.replaceChildren();
-
-    if (!list.length) {
-
-        const emptyMessage =
-            document.createElement("div");
-
-        emptyMessage.className =
-            "location-item-enter";
-
-        emptyMessage.textContent =
-            "ไม่พบหน่วยงาน";
-
-        container.appendChild(emptyMessage);
-
-        return;
-
-    }
-
-    const groups = {};
-
-    list.forEach(dep => {
-
-        (groups[dep.floor] ??= []).push(dep);
-
-    });
-
-    const fragment =
-        document.createDocumentFragment();
-
-    let animationIndex = 0;
-
-    Object.keys(groups)
-        .sort((a, b) => Number(a) - Number(b))
-        .forEach(floor => {
-
-            const group =
-                document.createElement("div");
-
-            group.className = "floor-group";
-
-            const title =
-                document.createElement("div");
-
-            title.className =
-                "floor-title location-item-enter";
-
-            title.style.setProperty(
-                "--item-delay",
-                `${Math.min(
-                    animationIndex * 40,
-                    280
-                )}ms`
-            );
-
-            title.textContent =
-                `ชั้น ${floor}`;
-
-            animationIndex++;
-
-            group.appendChild(title);
-
-            groups[floor].forEach(dep => {
-
-                const card =
-                    createDepartmentCard(dep);
-
-                card.classList.add(
-                    "location-item-enter"
-                );
-
-                card.style.setProperty(
-                    "--item-delay",
-                    `${Math.min(
-                        animationIndex * 40,
-                        280
-                    )}ms`
-                );
-
-                animationIndex++;
-
-                group.appendChild(card);
-
-            });
-
-            fragment.appendChild(group);
-
-        });
-
-    const otherCard =
-        createOtherDepartmentCard();
-
-    otherCard.classList.add(
-        "location-item-enter"
-    );
-
-    otherCard.style.setProperty(
-        "--item-delay",
-        `${Math.min(
-            animationIndex * 40,
-            280
-        )}ms`
-    );
-
-    fragment.appendChild(otherCard);
-
-    container.appendChild(fragment);
-
-}
-
-/* ==========================================
-   Location Section Animation
-========================================== */
-
-function animateLocationSection(section) {
-
-    if (!section) return;
-
-    section.classList.remove(
-        "location-section-enter"
-    );
-
-    void section.offsetWidth;
-
-    section.classList.add(
-        "location-section-enter"
-    );
-
-}
-
-/* ==========================================
-   Other Department
-========================================== */
-
-const otherDepartment = $("otherDepartment");
-
-otherDepartment.addEventListener("input", function () {
-
-    this.value = this.value.replace(/^\s+/, "");
-
-    feedback.department = this.value.trim();
-
-    $("otherDepartmentError").style.display = "none";
-
-    this.classList.remove("input-error");
-
-});
-
-otherDepartment.addEventListener("keydown", function (e) {
-
-    if (e.key === "Enter") {
-
-        e.preventDefault();
-
-        $("locationNextButton").click();
-
-    }
-
-});
-
-/* ==========================================
-   Location Back
-========================================== */
-
-$("locationBackButton").addEventListener("click", () => {
-
-    resetLocationState();
-
-    el.buildingSelect.value = "";
-
-    $("locationPage").style.display = "none";
-
-    $("categoryPage").style.display = "block";
-
-    scrollTopPage();
-
-});
-
-/* ==========================================
-   Location Next
-========================================== */
-
-el.locationNextButton.addEventListener("click", () => {
-
-    $("buildingError").style.display = "none";
-    $("floorError").style.display = "none";
-    $("departmentError").style.display = "none";
-    $("otherDepartmentError").style.display = "none";
-
-    $("buildingSelect").classList.remove("input-error");
-    $("floorContainer").classList.remove("input-error");
-    $("otherDepartment").classList.remove("input-error");
-
-    if (!feedback.buildingId) {
-
-        $("buildingError").style.display = "block";
-
-        $("buildingSelect").classList.add("input-error");
-
-        scrollToElement($("buildingSelect"));
-
-        return;
-
-    }
-
-    if (feedback.buildingId === "5") {
-
-        feedback.department = feedback.buildingName;
-
-    } else {
-
-        if (!feedback.floor) {
-
-            $("floorError").style.display = "block";
-
-            $("floorContainer").classList.add("input-error");
-
-            scrollToElement($("floorSection"));
-
-            return;
-
-        }
-
-        if ($("otherDepartmentGroup").style.display !== "none") {
-
-            const other = $("otherDepartment").value.trim();
-
-            if (!other) {
-
-                $("otherDepartmentError").style.display = "block";
-
-                $("otherDepartment").classList.add("input-error");
-
-                scrollToElement($("otherDepartment"));
-
-                return;
-
-            }
-
-            feedback.department = other;
-
-        }
-
-        if (!feedback.department) {
-
-            $("departmentError").style.display = "block";
-
-            scrollToElement($("departmentContainer"));
-
-            return;
-
-        }
-
-    }
-
-    const categoryMap = {
-
-        compliment: {
-            title: "รายละเอียดคำชม",
-            description: "กรุณาระบุรายละเอียดคำชมของท่าน",
-            label: "รายละเอียดคำชม",
-            placeholder: "เช่น เจ้าหน้าที่ให้บริการดี พูดจาสุภาพ เอาใจใส่ผู้รับบริการ",
-            summary: "🟢 คำชม",
-            color: "#2E7D32"
-        },
-
-        suggestion: {
-            title: "รายละเอียดข้อเสนอแนะ",
-            description: "กรุณาระบุข้อเสนอแนะของท่าน",
-            label: "รายละเอียดข้อเสนอแนะ",
-            placeholder: "เช่น ควรเพิ่มที่นั่งรอ เพิ่มช่องบริการ หรือปรับปรุงขั้นตอน",
-            summary: "🟡 ข้อเสนอแนะ",
-            color: "#F9A825"
-        },
-
-        complaint: {
-            title: "รายละเอียดข้อร้องเรียน",
-            description: "กรุณาระบุรายละเอียดปัญหาที่พบ",
-            label: "รายละเอียดข้อร้องเรียน",
-            placeholder: "เช่น เจ้าหน้าที่พูดจาไม่สุภาพ รอนาน หรือได้รับบริการไม่เหมาะสม",
-            summary: "🔴 ข้อร้องเรียน",
-            color: "#C62828"
-        }
-
-    };
-
-    const info = categoryMap[feedback.category];
-
-    $("summaryCard").className =
-        "summary-card " + feedback.category;
-
-    $("detailTitle").textContent = info.title;
-
-    $("detailTitle").style.color = info.color;
-
-    $("detailDescription").textContent =
-        info.description;
-
-    $("detailLabel").innerHTML =
-        `${info.label} <span style="color:#D32F2F;">*</span>`;
-
-    $("detailText").placeholder =
-        info.placeholder;
-
-    $("summaryCategory").textContent =
-        info.summary;
-
-    $("summaryBuilding").textContent =
-        feedback.buildingName;
-
-    $("summaryFloor").textContent =
-        feedback.floor
-            ? `ชั้น ${feedback.floor}`
-            : "-";
-
-    $("summaryDepartment").textContent =
-        feedback.department;
-
-    $("locationPage").style.display = "none";
-
-    $("detailPage").style.display = "block";
-
-    scrollTopPage();
-
-});
-
-/* ==========================================
-   Detail Input
-========================================== */
-
-const detailText = $("detailText");
-const detailCounter = $("detailCounter");
-const detailNextButton = $("detailNextButton");
-
-detailText.addEventListener("input", updateDetailState);
-
-function updateDetailState() {
-
-    detailText.value = detailText.value.replace(/^\s+/, "");
-
-    feedback.detail = detailText.value.trim();
-
-    detailCounter.textContent =
-        `${detailText.value.length} / 2000`;
-
-    $("detailError").style.display = "none";
-
-    detailText.classList.remove("input-error");
-
-    if (detailText.value.length >= 1900) {
-
-        detailCounter.style.color = "#D32F2F";
-
-    } else if (detailText.value.length >= 1500) {
-
-        detailCounter.style.color = "#F57C00";
-
-    } else {
-
-        detailCounter.style.color = "#757575";
-
-    }
-
-    validateDetailPage();
-
-}
-
-/* ==========================================
-   Detail Back
-========================================== */
-
-$("detailBackButton").addEventListener("click", () => {
-
-    $("detailPage").style.display = "none";
-
-    $("locationPage").style.display = "block";
-
-    animatePage($("locationPage"));
-
-    scrollTopPage();
-
-});
-
-/* ==========================================
-   Contact Select
-========================================== */
-
-document
-    .querySelectorAll(".contact-card")
-    .forEach(card => {
-
-        card.addEventListener("click", () => {
-
-            document
-                .querySelectorAll(".contact-card")
-                .forEach(c => c.classList.remove("selected"));
-
-            card.classList.add("selected");
-
-            $("contactError").style.display = "none";
-
-            const needContact =
-                card.dataset.contact === "yes";
-
-            feedback.needContact = needContact;
-
-            if (needContact) {
-
-                $("contactForm").style.display = "block";
-
-            } else {
-
-                $("contactForm").style.display = "none";
-
-                feedback.name = "";
-                feedback.phone = "";
-
-                $("contactName").value = "";
-                $("contactPhone").value = "";
-
-                $("nameError").style.display = "none";
-                $("phoneError").style.display = "none";
-
-                $("contactName").classList.remove("input-error");
-                $("contactPhone").classList.remove("input-error");
-
-            }
-
-            validateDetailPage();
-
-        });
-
-    });
-
-/* ==========================================
-   Phone Input
-========================================== */
-
-$("contactPhone").addEventListener("input", function () {
-
-    this.value =
-        this.value.replace(/\D/g, "").slice(0, 10);
-
-    feedback.phone = this.value;
-
-    $("phoneError").style.display = "none";
-
-    this.classList.remove("input-error");
-
-    validateDetailPage();
-
-});
-
-/* ==========================================
-   Name Input
-========================================== */
-
-$("contactName").addEventListener("input", function () {
-
-    feedback.name =
-        this.value.trim();
-
-    $("nameError").style.display = "none";
-
-    this.classList.remove("input-error");
-
-    validateDetailPage();
-
-});
-
-/* ==========================================
-   Validate Detail
-========================================== */
-
-function validateDetailPage() {
-
-    feedback.detail =
-        $("detailText").value.trim();
-
-    feedback.name =
-        $("contactName").value.trim();
-
-    feedback.phone =
-        $("contactPhone").value.trim();
-
-    $("detailError").style.display = "none";
-    $("nameError").style.display = "none";
-    $("phoneError").style.display = "none";
-
-    $("detailText").classList.remove("input-error");
-    $("contactName").classList.remove("input-error");
-    $("contactPhone").classList.remove("input-error");
-
-    if (
-        feedback.needContact &&
-        feedback.phone &&
-        !/^0\d{9}$/.test(feedback.phone)
-    ) {
-
-        $("phoneError").style.display = "block";
-
-        $("contactPhone").classList.add("input-error");
-
-    }
-
-}
-
-/* ==========================================
-   Compress Image
-========================================== */
-
-async function compressImage(file) {
-
-    const MAX_SIZE = 1600;
-    const QUALITY = 0.80;
-
-    const image = await createImageBitmap(file);
-
-    let width = image.width;
-    let height = image.height;
-
-    if (width > MAX_SIZE || height > MAX_SIZE) {
-
-        const ratio = Math.min(
-            MAX_SIZE / width,
-            MAX_SIZE / height
-        );
-
-        width = Math.round(width * ratio);
-        height = Math.round(height * ratio);
-
-    }
-
-    const canvas = document.createElement("canvas");
-
-    canvas.width = width;
-    canvas.height = height;
-
-    const ctx = canvas.getContext("2d");
-
-    ctx.drawImage(
-        image,
-        0,
-        0,
-        width,
-        height
-    );
-
-    image.close();
-
-    const blob = await new Promise(resolve => {
-
-        canvas.toBlob(
-            resolve,
-            "image/jpeg",
-            QUALITY
-        );
-
-    });
-
-    if (!blob) {
-
-        throw new Error(
-            "ไม่สามารถประมวลผลรูปภาพได้"
-        );
-
-    }
-
-    return new File(
-        [blob],
-        "compressed.jpg",
-        {
-            type: "image/jpeg"
-        }
-    );
-
-}
-
-/* ==========================================
-   Image Preview
-========================================== */
-
-const imageInput = $("imageInput");
-const imagePreview = $("imagePreview");
-const removeImageButton = $("removeImageButton");
-
-imageInput.addEventListener("change", previewImage);
-
-function previewImage() {
-
-    const file = imageInput.files[0];
-
-    if (!file) {
-
-        resetImage();
-
-        return;
-
-    }
-
-    const allowTypes = [
-        "image/jpeg",
-        "image/png",
-        "image/heic",
-        "image/heif",
-        "image/webp"
-    ];
-
-    const extension =
-        file.name.split(".").pop().toLowerCase();
-
-    const allowExtensions = [
-        "jpg",
-        "jpeg",
-        "png",
-        "heic",
-        "heif",
-        "webp"
-    ];
-
-    if (
-        !allowTypes.includes(file.type) &&
-        !allowExtensions.includes(extension)
-    ) {
-
-        alert(
-            `รองรับเฉพาะไฟล์
-
-• JPG
-• PNG
-• HEIC
-• HEIF
-• WEBP`
-        );
-
-        resetImage();
-
-        return;
-
-    }
-
-    if (file.size > 10 * 1024 * 1024) {
-
-        alert("รูปภาพต้องมีขนาดไม่เกิน 10 MB");
-
-        resetImage();
-
-        return;
-
-    }
-
-    feedback.imageFile = file;
-
-    const reader = new FileReader();
-
-    reader.onload = function (e) {
-
-        imagePreview.innerHTML = `
-            <img
-                src="${e.target.result}"
-                class="preview-image"
-                style="cursor:zoom-in;">
+        loading.innerHTML = `
+            <span class="loading-spinner"></span>
+            <span>กำลังโหลดกราฟ...</span>
         `;
 
-        imagePreview.querySelector("img").onclick = () => {
-
-            $("modalImage").src = e.target.result;
-
-            $("imageModal").style.display = "flex";
-
-        };
-
-    };
-
-    reader.readAsDataURL(file);
-
-    document.querySelector(".upload-title").textContent =
-        "✔ แนบรูปภาพแล้ว";
-
-    document.querySelector(".upload-title").style.color =
-        "#2E7D32";
-
-    document.querySelector(".upload-subtitle").textContent =
-        `${(file.size / 1024 / 1024).toFixed(2)} MB`;
-
-    removeImageButton.style.display = "block";
-
+        wrapper.appendChild(loading);
+    });
 }
 
-/* ==========================================
-   Remove Image
-========================================== */
+// ==============================
+// REMOVE DASHBOARD LOADING
+// ==============================
 
-removeImageButton.addEventListener("click", resetImage);
-
-function resetImage() {
-
-    feedback.imageFile = null;
-    feedback.imageDriveId = "";
-    feedback.imageFileName = "";
-    feedback.imageSize = 0;
-
-    imageInput.value = "";
-
-    imagePreview.innerHTML = "";
-
-    removeImageButton.style.display = "none";
-
-    document.querySelector(".upload-title").textContent =
-        "แตะเพื่อเลือกรูปภาพ";
-
-    document.querySelector(".upload-title").style.color = "";
-
-    document.querySelector(".upload-subtitle").textContent =
-        "JPG / PNG / HEIC ไม่เกิน 10 MB";
-
+function removeDashboardLoading() {
+    document.querySelectorAll(".chart-loading").forEach(loading => {
+        loading.remove();
+    });
 }
 
-/* ==========================================
-   Detail Next
-========================================== */
+// ========================================
+// เริ่มต้น Dashboard
+// ========================================
 
-detailNextButton.addEventListener("click", () => {
+async function init() {
+    try {
+        setDashboardLoading();
 
-    validateDetailPage();
+        feedbackData = await getFeedbackData();
 
-    if (!feedback.detail) {
+        console.log("ข้อมูลจาก Google Sheets:", feedbackData);
 
-        $("detailError").style.display = "block";
+        const fiscalYearFilter = document.getElementById("fiscalYearFilter");
+        const cachedYear = getCachedFiscalYear();
 
-        $("detailText").classList.add("input-error");
-
-        scrollToElement($("detailText"));
-
-        return;
-
-    }
-
-    if (feedback.needContact === null) {
-
-        $("contactError").style.display = "block";
-
-        scrollToElement(
-            document.querySelector(".contact-container")
-        );
-
-        return;
-
-    }
-
-    if (feedback.needContact && !feedback.name) {
-
-        $("nameError").style.display = "block";
-
-        $("contactName").classList.add("input-error");
-
-        scrollToElement($("contactForm"));
-
-        return;
-
-    }
-
-    if (
-        feedback.needContact &&
-        !/^0\d{9}$/.test(feedback.phone)
-    ) {
-
-        $("phoneError").style.display = "block";
-
-        $("contactPhone").classList.add("input-error");
-
-        scrollToElement($("contactForm"));
-
-        return;
-
-    }
-
-    const categoryMap = {
-
-        compliment: {
-            text: "🟢 คำชม",
-            className: "compliment"
-        },
-
-        suggestion: {
-            text: "🟡 ข้อเสนอแนะ",
-            className: "suggestion"
-        },
-
-        complaint: {
-            text: "🔴 ข้อร้องเรียน",
-            className: "complaint"
+        if (
+            fiscalYearFilter &&
+            fiscalYearFilter.querySelector(`option[value="${cachedYear}"]`)
+        ) {
+            fiscalYearFilter.value = cachedYear;
         }
 
-    };
+        populateDepartmentFilter(feedbackData);
+        setupFeedbackCategoryFilter();
+        setupFeedbackSearch();
+        setupFeedbackDepartmentFilter();
 
-    const info = categoryMap[feedback.category];
+        updateDashboard(cachedYear);
 
-    $("reviewCategory").textContent = info.text;
+        if (fiscalYearFilter) {
+            fiscalYearFilter.addEventListener("change", (event) => {
+                const selectedYear = event.target.value;
 
-    $("reviewCategory").className =
-        "review-badge " + info.className;
+                saveCachedFiscalYear(selectedYear);
 
-    const locationLines = [];
+                currentFeedbackPage = 1;
+                updateDashboard(selectedYear);
+            });
+        }
 
-    const departmentName =
-        (feedback.department || "").trim();
+    } catch (error) {
+        console.error("เกิดข้อผิดพลาด:", error);
 
-    const buildingName =
-        (feedback.buildingName || "").trim();
+        const container = document.getElementById("feedbackPreviewList");
 
-    if (departmentName) {
+        if (container) {
+            container.innerHTML = `
+                <div class="feedback-empty">
+                    ไม่สามารถโหลดข้อมูลความคิดเห็นได้ กรุณาลองใหม่อีกครั้ง
+                </div>
+            `;
+        }
 
-        locationLines.push(
-            departmentName
-        );
-
+    } finally {
+        removeDashboardLoading();
     }
+}
 
-    const buildingFloorParts = [];
+// ========================================
+// DEPARTMENT FILTER
+// ========================================
+
+function populateDepartmentFilter(data) {
+    const select = document.getElementById("feedbackDepartmentFilter");
+
+    if (!select) return;
+
+    const departments = [...new Set(
+        (data || [])
+            .map(item => String(item.Department || "").trim())
+            .filter(Boolean)
+    )].sort((a, b) => a.localeCompare(b, "th"));
+
+    select.innerHTML = `
+        <option value="all">ทุกหน่วยงาน</option>
+        ${departments.map(department => `
+            <option value="${escapeFeedbackHtml(department)}">
+                ${escapeFeedbackHtml(department)}
+            </option>
+        `).join("")}
+    `;
+}
+
+// ========================================
+// FEEDBACK SEARCH
+// ========================================
+
+function setupFeedbackSearch() {
+    const searchInput = document.getElementById("feedbackSearch");
+
+    if (!searchInput) return;
+
+    searchInput.addEventListener("input", () => {
+        feedbackSearchQuery = searchInput.value.trim().toLowerCase();
+        currentFeedbackPage = 1;
+
+        const fiscalYearFilter = document.getElementById("fiscalYearFilter");
+        const selectedYear = fiscalYearFilter
+            ? fiscalYearFilter.value
+            : "all";
+
+        renderFeedbackPreview(
+            feedbackData,
+            selectedYear,
+            feedbackCategoryFilter
+        );
+    });
+}
+
+// ========================================
+// FEEDBACK CATEGORY FILTER
+// ========================================
+
+function setupFeedbackCategoryFilter() {
+    const filterButtons = document.querySelectorAll(
+        ".feedback-filter-btn"
+    );
+
+    filterButtons.forEach(filterButton => {
+        filterButton.addEventListener("click", () => {
+            feedbackCategoryFilter = filterButton.dataset.category || "all";
+            currentFeedbackPage = 1;
+
+            filterButtons.forEach(btn => {
+                const isActive = btn === filterButton;
+
+                btn.classList.toggle("active", isActive);
+                btn.setAttribute(
+                    "aria-pressed",
+                    isActive ? "true" : "false"
+                );
+            });
+
+            const fiscalYearFilter = document.getElementById("fiscalYearFilter");
+            const selectedYear = fiscalYearFilter
+                ? fiscalYearFilter.value
+                : "all";
+
+            renderFeedbackPreview(
+                feedbackData,
+                selectedYear,
+                feedbackCategoryFilter
+            );
+        });
+    });
+}
+
+function setupFeedbackDepartmentFilter() {
+    const select = document.getElementById("feedbackDepartmentFilter");
+
+    if (!select) return;
+
+    select.addEventListener("change", () => {
+        feedbackDepartmentFilter = select.value || "all";
+        currentFeedbackPage = 1;
+
+        const fiscalYearFilter = document.getElementById("fiscalYearFilter");
+        const selectedYear = fiscalYearFilter
+            ? fiscalYearFilter.value
+            : "all";
+
+        renderFeedbackPreview(
+            feedbackData,
+            selectedYear,
+            feedbackCategoryFilter
+        );
+    });
+}
+
+// ==============================
+// คืนค่าปีงบประมาณเมื่อ Browser กลับมาหน้า Dashboard
+// ==============================
+
+window.addEventListener("pageshow", (event) => {
+    if (!event.persisted) return;
+
+    const fiscalYearFilter = document.getElementById("fiscalYearFilter");
+    if (!fiscalYearFilter) return;
+
+    const cachedYear = getCachedFiscalYear();
 
     if (
-        buildingName &&
-        buildingName !== departmentName
+        fiscalYearFilter.querySelector(`option[value="${cachedYear}"]`)
     ) {
-
-        buildingFloorParts.push(
-            buildingName
-        );
-
+        fiscalYearFilter.value = cachedYear;
+        updateDashboard(cachedYear);
     }
-
-    if (feedback.floor) {
-
-        buildingFloorParts.push(
-            `ชั้น ${feedback.floor}`
-        );
-
-    }
-
-    if (buildingFloorParts.length > 0) {
-
-        locationLines.push(
-            buildingFloorParts.join(" ")
-        );
-
-    }
-
-    $("reviewLocation").textContent =
-        locationLines.join("\n");
-
-    $("reviewDetail").textContent =
-        feedback.detail;
-
-    if (feedback.needContact) {
-
-        $("reviewContact").textContent =
-            "ต้องการให้เจ้าหน้าที่ติดต่อกลับ";
-
-        $("reviewContactDetail").style.display =
-            "flex";
-
-        $("reviewName").textContent =
-            `คุณ ${feedback.name}`;
-
-        $("reviewPhone").textContent =
-            `เบอร์ ${feedback.phone}`;
-
-    } else {
-
-        $("reviewContact").textContent =
-            "ไม่ต้องการให้เจ้าหน้าที่ติดต่อกลับ";
-
-        $("reviewContactDetail").style.display =
-            "none";
-
-    }
-
-    $("detailPage").style.display = "none";
-
-    $("reviewPage").style.display = "block";
-
-    animatePage($("reviewPage"));
-
-    scrollTopPage();
-
 });
 
-/* ==========================================
-   Review Back
-========================================== */
+// ==============================
+// กรองข้อมูลตามปีงบประมาณ
+// ==============================
 
-$("reviewBackButton").addEventListener("click", () => {
+function filterByFiscalYear(data, fiscalYear) {
+    if (fiscalYear === "all") return data;
 
-    $("reviewPage").style.display = "none";
+    return data.filter(item => {
+        if (!item.Timestamp) return false;
 
-    $("detailPage").style.display = "block";
+        const date = new Date(item.Timestamp);
+        if (isNaN(date.getTime())) return false;
 
-    animatePage($("detailPage"));
+        const parts = new Intl.DateTimeFormat("en-US", {
+            year: "numeric",
+            month: "numeric",
+            timeZone: "Asia/Bangkok"
+        }).formatToParts(date);
 
-    scrollTopPage();
+        const year = Number(
+            parts.find(part => part.type === "year")?.value
+        );
 
-});
+        const month = Number(
+            parts.find(part => part.type === "month")?.value
+        );
 
-/* ==========================================
-   Submit
-========================================== */
+        const thaiFiscalYear = month >= 10
+            ? year + 544
+            : year + 543;
 
-$("submitButton").addEventListener("click", submitFeedback);
+        return thaiFiscalYear === Number(fiscalYear);
+    });
+}
 
-let isSubmitting = false;
+// ==============================
+// อัปเดต Dashboard
+// ==============================
 
-async function submitFeedback() {
+function updateDashboard(fiscalYear) {
+    const filteredData = filterByFiscalYear(feedbackData, fiscalYear);
 
-    if (isSubmitting) return;
+    console.log("ปีงบประมาณที่เลือก:", fiscalYear);
+    console.log("ข้อมูลหลังกรอง:", filteredData);
 
-    isSubmitting = true;
+    const summary = {
+        compliment: filteredData.filter(
+            item => item.Category === "compliment"
+        ).length,
 
-    showLoading("กำลังส่งความคิดเห็น...");
+        suggestion: filteredData.filter(
+            item => item.Category === "suggestion"
+        ).length,
 
-    feedback.device = getDevice();
-    feedback.browser = getBrowser();
+        complaint: filteredData.filter(
+            item => item.Category === "complaint"
+        ).length
+    };
 
-    try {
+    summary.total =
+        summary.compliment +
+        summary.suggestion +
+        summary.complaint;
 
-        if (!feedback.imageFile) {
-            // ถ้าไม่มีไฟล์ใหม่ แต่มีรูปที่อัปโหลดไว้แล้ว
-            // ให้คงข้อมูลรูปเดิมไว้สำหรับการบันทึกซ้ำ
-            if (!feedback.imageDriveId) {
-                feedback.imageFileName = "";
-                feedback.imageSize = 0;
+    const getPercent = value => {
+        return summary.total === 0
+            ? 0
+            : ((value / summary.total) * 100).toFixed(1);
+    };
+
+    const totalMeta = document.getElementById("totalMeta");
+    const complaintMeta = document.getElementById("complaintMeta");
+    const suggestionMeta = document.getElementById("suggestionMeta");
+    const complimentMeta = document.getElementById("complimentMeta");
+
+    if (totalMeta) {
+        totalMeta.textContent = "ทุกประเภทในช่วงเวลาที่เลือก";
+    }
+
+    if (complaintMeta) {
+        complaintMeta.textContent = `${getPercent(summary.complaint)}% ของทั้งหมด`;
+    }
+
+    if (suggestionMeta) {
+        suggestionMeta.textContent = `${getPercent(summary.suggestion)}% ของทั้งหมด`;
+    }
+
+    if (complimentMeta) {
+        complimentMeta.textContent = `${getPercent(summary.compliment)}% ของทั้งหมด`;
+    }
+
+    const complimentCard = document.querySelector(
+        ".summary-card.compliment .summary-value"
+    );
+
+    const suggestionCard = document.querySelector(
+        ".summary-card.suggestion .summary-value"
+    );
+
+    const complaintCard = document.querySelector(
+        ".summary-card.complaint .summary-value"
+    );
+
+    const totalCard = document.querySelector(
+        ".summary-card.total .summary-value"
+    );
+
+    animateCount(complimentCard, summary.compliment);
+    animateCount(suggestionCard, summary.suggestion);
+    animateCount(complaintCard, summary.complaint);
+    animateCount(totalCard, summary.total);
+
+    const legendCompliment = document.getElementById("legendCompliment");
+    const legendSuggestion = document.getElementById("legendSuggestion");
+    const legendComplaint = document.getElementById("legendComplaint");
+
+    if (legendCompliment) legendCompliment.textContent = summary.compliment;
+    if (legendSuggestion) legendSuggestion.textContent = summary.suggestion;
+    if (legendComplaint) legendComplaint.textContent = summary.complaint;
+
+    prepareChartData(filteredData, fiscalYear);
+
+    const pieCenterValue = document.getElementById("pieCenterValue");
+
+    if (pieCenterValue) {
+        pieCenterValue.textContent = summary.total;
+    }
+
+    initCharts();
+
+    renderFeedbackPreview(
+        feedbackData,
+        fiscalYear,
+        feedbackCategoryFilter
+    );
+
+    console.log("Dashboard และกราฟอัปเดตสำเร็จ");
+}
+
+// ==============================
+// แสดงความคิดเห็นล่าสุด 10 รายการ
+// ==============================
+
+function escapeFeedbackHtml(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+// ==============================
+// แปลงชื่อประเภทความคิดเห็น
+// ==============================
+
+function getFeedbackCategoryLabel(category) {
+    const value = String(category || "").trim().toLowerCase();
+
+    if (value.includes("compliment") || value.includes("ชม")) {
+        return "คำชม";
+    }
+
+    if (value.includes("suggestion") || value.includes("เสนอ")) {
+        return "ข้อเสนอแนะ";
+    }
+
+    if (value.includes("complaint") || value.includes("ร้องเรียน")) {
+        return "ข้อร้องเรียน";
+    }
+
+    return "ไม่ระบุประเภท";
+}
+
+// ==============================
+// แปลงวันที่และเวลา
+// ==============================
+
+function formatFeedbackDateTime(timestamp) {
+    if (!timestamp) return "-";
+
+    const date = new Date(timestamp);
+
+    if (isNaN(date.getTime())) {
+        return escapeFeedbackHtml(timestamp);
+    }
+
+    const dateText = new Intl.DateTimeFormat("th-TH", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        timeZone: "Asia/Bangkok"
+    }).format(date);
+
+    const timeText = new Intl.DateTimeFormat("th-TH", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+        timeZone: "Asia/Bangkok"
+    }).format(date);
+
+    return `${dateText} ${timeText} น.`;
+}
+
+// ========================================
+// FEEDBACK IMAGE VIEWER - รองรับรูปทุกประเภทความคิดเห็น
+// ========================================
+
+
+function getFeedbackImageUrls(item) {
+    if (!item || typeof item !== "object") return [];
+
+    const images = [];
+
+    function addImage(value) {
+        if (value == null) return;
+
+        if (Array.isArray(value)) {
+            value.forEach(addImage);
+            return;
+        }
+
+        if (typeof value === "object") {
+            Object.values(value).forEach(addImage);
+            return;
+        }
+
+        const text = String(value).trim();
+        if (!text) return;
+
+        // รองรับข้อมูลที่เก็บเป็น JSON
+        try {
+            if (
+                (text.startsWith("[") && text.endsWith("]")) ||
+                (text.startsWith("{") && text.endsWith("}"))
+            ) {
+                addImage(JSON.parse(text));
+                return;
+            }
+        } catch (e) { }
+
+        // แยกข้อมูลหลายรายการ
+        const parts = text.split(/[\n,]+/).map(v => v.trim()).filter(Boolean);
+
+        parts.forEach(part => {
+            // กรณีเป็น URL
+            const urlMatches = part.match(/https?:\/\/[^\s"'<>]+/gi);
+
+            if (urlMatches) {
+                urlMatches.forEach(rawUrl => {
+                    const url = rawUrl.replace(/[),.;]+$/, "");
+
+                    let driveId = "";
+
+                    const match = url.match(
+                        /(?:\/file\/d\/|[?&]id=)([a-zA-Z0-9_-]+)/
+                    );
+
+                    if (/drive\.google\.com/i.test(url) && match) {
+                        driveId = match[1];
+                    }
+
+                    const image = driveId
+                        ? { id: driveId, type: "drive" }
+                        : { id: url, type: "url" };
+
+                    if (!images.some(img => img.id === image.id)) {
+                        images.push(image);
+                    }
+                });
+
+                return;
             }
 
-            saveFeedbackData();
-            return;
-        }
-
-        const compressedFile =
-            await compressImage(feedback.imageFile);
-
-        const base64 =
-            await fileToBase64(compressedFile);
-
-        const upload =
-            await uploadImage(
-                base64,
-                compressedFile.type
-            );
-
-        if (!upload.success) {
-
-            isSubmitting = false;
-
-            showError(upload.message);
-
-            return;
-
-        }
-
-        feedback.imageDriveId =
-            upload.fileId;
-
-        feedback.imageFileName =
-            upload.fileName;
-
-        feedback.imageSize =
-            upload.fileSize;
-
-        feedback.imageFile = null;
-
-        saveFeedbackData();
-
-    }
-
-    catch (err) {
-
-        isSubmitting = false;
-
-        showError(err);
-
-    }
-
-}
-
-/* ==========================================
-   Save Feedback
-========================================== */
-
-function saveFeedbackData() {
-
-    const data = {
-
-        category: feedback.category,
-        buildingName: feedback.buildingName,
-        floor: feedback.floor,
-        department: feedback.department,
-        detail: feedback.detail,
-
-        imageDriveId: feedback.imageDriveId,
-        imageFileName: feedback.imageFileName,
-        imageSize: feedback.imageSize,
-
-        needContact: feedback.needContact,
-        name: feedback.name,
-        phone: feedback.phone,
-
-        device: feedback.device,
-        browser: feedback.browser
-
-    };
-
-    saveFeedback(data)
-
-        .then(result => {
-
-            isSubmitting = false;
-
-            $("submitButton").disabled = false;
-
-            $("submitButton").innerHTML =
-                "ส่งความคิดเห็น";
-
-            saveSuccess(result);
-
-        })
-
-        .catch(err => {
-
-            isSubmitting = false;
-
-            $("submitButton").disabled = false;
-
-            $("submitButton").innerHTML =
-                "ส่งความคิดเห็น";
-
-            showError(err);
-
+            // กรณีเป็น Google Drive ID ล้วนจากชีต
+            // Drive ID ปกติเป็นตัวอักษร/ตัวเลข/_/- และมีความยาวค่อนข้างมาก
+            if (/^[a-zA-Z0-9_-]{20,}$/.test(part)) {
+                if (!images.some(img => img.id === part)) {
+                    images.push({
+                        id: part,
+                        type: "drive"
+                    });
+                }
+            }
         });
-
-}
-
-/* ==========================================
-   Save Success
-========================================== */
-
-function saveSuccess(result) {
-
-    if (!result.success) {
-
-        showError(result.message);
-
-        return;
-
     }
 
-    hideLoading();
+    // ตรวจทุก field ในข้อมูล
+    Object.values(item).forEach(addImage);
 
-    $("reviewPage").style.display = "none";
-
-    $("successPage").style.display = "block";
-
-    animatePage($("successPage"));
-
-    $("successContactBox").style.display =
-        feedback.needContact ? "block" : "none";
-
-    $("successThankBox").style.display =
-        feedback.needContact ? "none" : "block";
-
-    if ($("ticketNo")) {
-
-        $("ticketNo").textContent =
-            result.ticketNo || "-";
-
-    }
-
-    scrollTopPage();
-
+    return images;
 }
 
-/* ==========================================
-   Reset Feedback
-========================================== */
+function getFeedbackImagePreviewUrl(image) {
+    if (!image) return "";
 
-function resetFeedback() {
+    if (image.type === "drive") {
+        return `https://drive.google.com/thumbnail?id=${encodeURIComponent(image.id)}&sz=w1600`;
+    }
 
-    Object.assign(feedback, {
+    return image.id;
+}
 
-        category: "",
-        buildingId: "",
-        buildingName: "",
-        floor: "",
-        department: "",
-        detail: "",
+function setupFeedbackImageViewer() {
+    if (document.getElementById("feedbackImageModal")) return;
 
-        imageFile: null,
-        imageDriveId: "",
-        imageFileName: "",
-        imageSize: 0,
+    const style = document.createElement("style");
 
-        needContact: null,
-        name: "",
-        phone: "",
+    style.textContent = `
+        .feedback-image-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 12px;
+            padding: 7px 13px;
+            border: 1px solid #d7e3f5;
+            border-radius: 8px;
+            background: #f4f8ff;
+            color: #3569b5;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all .2s ease;
+        }
 
-        device: "",
-        browser: ""
+        .feedback-image-btn:hover {
+            background: #e8f1ff;
+            border-color: #9bbce8;
+        }
 
+        .feedback-image-btn .material-symbols-rounded {
+            font-size: 18px;
+        }
+
+        .feedback-image-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(15, 23, 42, .78);
+            padding: 24px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feedback-image-modal.show {
+            display: flex;
+        }
+
+        .feedback-image-modal-content {
+            position: relative;
+            width: min(900px, 100%);
+            max-height: 90vh;
+            overflow: auto;
+            background: #fff;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.25);
+        }
+
+        .feedback-image-modal-close {
+            position: sticky;
+            top: 0;
+            float: right;
+            z-index: 2;
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 50%;
+            background: #f1f3f5;
+            color: #333;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .feedback-image-modal-title {
+            margin: 0 45px 16px 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .feedback-image-modal-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .feedback-image-modal-gallery img {
+            display: block;
+            width: 100%;
+            max-height: 75vh;
+            object-fit: contain;
+            border-radius: 8px;
+            background: #f5f5f5;
+        }
+
+        .feedback-image-modal-item {
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .feedback-image-modal-item a {
+            display: block;
+            text-align: center;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        @media (max-width: 600px) {
+            .feedback-image-modal {
+                padding: 10px;
+            }
+
+            .feedback-image-modal-content {
+                padding: 14px;
+                border-radius: 10px;
+            }
+        }
+    `;
+
+    document.head.appendChild(style);
+
+    const modal = document.createElement("div");
+
+    modal.id = "feedbackImageModal";
+    modal.className = "feedback-image-modal";
+
+    modal.innerHTML = `
+        <div class="feedback-image-modal-content">
+            <button type="button"
+                class="feedback-image-modal-close"
+                aria-label="ปิด">
+                ×
+            </button>
+
+            <h3 class="feedback-image-modal-title">
+                รูปภาพที่แนบมา
+            </h3>
+
+            <div class="feedback-image-modal-gallery"
+                id="feedbackImageModalGallery">
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    function closeModal() {
+        modal.classList.remove("show");
+        document.body.style.overflow = "";
+    }
+
+    modal.querySelector(".feedback-image-modal-close")
+        .addEventListener("click", closeModal);
+
+    modal.addEventListener("click", event => {
+        if (event.target === modal) {
+            closeModal();
+        }
     });
 
-    document
-        .querySelectorAll(".category-card")
-        .forEach(card =>
-            card.classList.remove("selected"));
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && modal.classList.contains("show")) {
+            closeModal();
+        }
+    });
 
-    $("nextButton").disabled = true;
+    // Event delegation รองรับปุ่มที่ถูกสร้างใหม่ทุกครั้ง
+    document.addEventListener("click", event => {
+        const button = event.target.closest(".feedback-image-btn");
 
-    resetLocationState();
+        if (!button) return;
 
-    el.buildingSelect.value = "";
+        let urls = [];
 
-    $("detailText").value = "";
+        try {
+            urls = JSON.parse(
+                decodeURIComponent(button.dataset.images || "%5B%5D")
+            );
+        } catch (error) {
+            console.error("อ่านลิงก์รูปไม่สำเร็จ:", error);
+            return;
+        }
 
-    $("detailCounter").textContent = "0 / 2000";
+        const gallery = document.getElementById("feedbackImageModalGallery");
 
-    $("contactForm").style.display = "none";
+        if (!gallery) return;
 
-    $("contactName").value = "";
+        gallery.innerHTML = urls.map(image => {
+            const previewUrl = getFeedbackImagePreviewUrl(image);
 
-    $("contactPhone").value = "";
+            const originalUrl = image.type === "drive"
+                ? `https://drive.google.com/uc?export=view&id=${encodeURIComponent(image.id)}`
+                : image.id;
 
-    document
-        .querySelectorAll(".contact-card")
-        .forEach(card =>
-            card.classList.remove("selected"));
+            const safeOriginalUrl = escapeFeedbackHtml(originalUrl);
+            const safePreviewUrl = escapeFeedbackHtml(previewUrl);
 
-    resetImage();
+            return `
+        <div class="feedback-image-modal-item">
+            <img
+                src="${safePreviewUrl}"
+                alt="รูปที่แนบมา"
+                loading="lazy"
+                onerror="this.alt='ไม่สามารถแสดงภาพตัวอย่างได้ กรุณาเปิดรูปต้นฉบับ'; this.style.display='none'"
+            >
 
-    $("reviewPage").style.display = "none";
+            <a
+                href="${safeOriginalUrl}"
+                target="_blank"
+                rel="noopener noreferrer">
+                คลิกที่นี่เพื่อเปิดรูปต้นฉบับจาก Google Drive
+            </a>
+        </div>
+    `;
+        }).join("");
 
-    $("detailPage").style.display = "none";
-
-    $("locationPage").style.display = "none";
-
-    $("categoryPage").style.display = "none";
-
-    $("successPage").style.display = "none";
-
-    $("welcomePage").style.display = "block";
-
-    requestAnimationFrame(scrollTopPage);
-
+        modal.classList.add("show");
+        document.body.style.overflow = "hidden";
+    });
 }
 
-/* ==========================================
-   Restart
-========================================== */
 
-$("restartButton").addEventListener("click", () => {
+// ========================================
+// RENDER FEEDBACK LIST + PAGINATION
+// ========================================
 
-    resetFeedback();
+function renderFeedbackPreview(
+    data,
+    fiscalYear = "all",
+    category = "all"
+) {
+    const container = document.getElementById("feedbackPreviewList");
+    const pagination = document.getElementById("feedbackPagination");
+    const resultsInfo = document.getElementById("feedbackResultsInfo");
 
-});
+    if (!container) return;
 
-/* ==========================================
-   Reset Location
-========================================== */
+    setupFeedbackImageViewer();
 
-function resetLocationState() {
+    // 1. กรองปีงบประมาณ
+    let filtered = filterByFiscalYear(data || [], fiscalYear);
 
-    feedback.buildingId = "";
-    feedback.buildingName = "";
-    feedback.floor = "";
-    feedback.department = "";
+    // 2. กรองประเภทความคิดเห็น
+    if (category !== "all") {
+        const targetCategory = getFeedbackCategoryLabel(category);
 
-    $("buildingError").style.display = "none";
-    $("floorError").style.display = "none";
-    $("departmentError").style.display = "none";
-    $("otherDepartmentError").style.display = "none";
-
-    $("buildingSelect").classList.remove("input-error");
-    $("floorContainer").classList.remove("input-error");
-    $("otherDepartment").classList.remove("input-error");
-
-    $("otherDepartment").value = "";
-
-    if ($("otherDepartmentGroup")) {
-
-        $("otherDepartmentGroup").style.display = "none";
-
+        filtered = filtered.filter(item =>
+            getFeedbackCategoryLabel(item.Category) === targetCategory
+        );
     }
 
-    el.floorContainer.replaceChildren();
+    // 3. กรองหน่วยงาน
+    if (feedbackDepartmentFilter !== "all") {
+        filtered = filtered.filter(item =>
+            String(item.Department || "").trim() === feedbackDepartmentFilter
+        );
+    }
 
-    el.departmentContainer.replaceChildren();
+    // 4. ค้นหา
+    if (feedbackSearchQuery) {
+        filtered = filtered.filter(item => {
+            const searchableText = [
+                item.Detail,
+                item.Department,
+                item.Building,
+                item.Floor,
+                getFeedbackCategoryLabel(item.Category),
+                item.Timestamp
+            ]
+                .map(value => String(value || ""))
+                .join(" ")
+                .toLowerCase();
 
-    el.floorSection.style.display = "none";
+            return searchableText.includes(feedbackSearchQuery);
+        });
+    }
 
-    el.departmentSection.style.display = "none";
+    // 5. เรียงวันที่ล่าสุดก่อน
+    filtered.sort((a, b) => {
+        const dateA = a.Timestamp ? new Date(a.Timestamp).getTime() : NaN;
+        const dateB = b.Timestamp ? new Date(b.Timestamp).getTime() : NaN;
 
+        const validA = Number.isFinite(dateA);
+        const validB = Number.isFinite(dateB);
+
+        if (validA && validB) return dateB - dateA;
+        if (validA) return -1;
+        if (validB) return 1;
+
+        return 0;
+    });
+
+    // 6. Pagination
+    const totalItems = filtered.length;
+    const totalPages = Math.ceil(totalItems / FEEDBACK_PER_PAGE);
+
+    currentFeedbackPage = totalPages === 0
+        ? 1
+        : Math.min(Math.max(currentFeedbackPage, 1), totalPages);
+
+    const startIndex = (currentFeedbackPage - 1) * FEEDBACK_PER_PAGE;
+    const endIndex = Math.min(startIndex + FEEDBACK_PER_PAGE, totalItems);
+
+    const pageItems = filtered.slice(startIndex, endIndex);
+
+    // 7. แสดงจำนวนรายการ
+    if (resultsInfo) {
+        resultsInfo.textContent = totalItems > 0
+            ? `พบ ${totalItems.toLocaleString("th-TH")} รายการ · หน้า ${currentFeedbackPage.toLocaleString("th-TH")} จาก ${totalPages.toLocaleString("th-TH")}`
+            : "ไม่พบความคิดเห็น";
+    }
+
+    // 8. กรณีไม่มีข้อมูล
+    if (!pageItems.length) {
+        container.innerHTML = `
+            <div class="feedback-empty">
+                ไม่พบความคิดเห็นในตัวกรองนี้
+            </div>
+        `;
+
+        if (pagination) pagination.innerHTML = "";
+        return;
+    }
+
+    // 9. Render รายการความคิดเห็น
+    container.innerHTML = pageItems.map(item => {
+        const label = getFeedbackCategoryLabel(item.Category);
+        const dateTime = formatFeedbackDateTime(item.Timestamp);
+
+
+
+        const department = String(
+            item.Department || "ไม่ระบุหน่วยงาน"
+        ).trim();
+
+        const building = String(item.Building || "").trim();
+        const floor = String(item.Floor || "").trim();
+
+        // ซ่อนสถานที่กรณีลานจอดรถ
+        const isParking =
+            /ลานจอดรถ/.test(department) ||
+            /ลานจอดรถ/.test(building);
+
+        let locationLine = "";
+
+        if (!isParking) {
+            const locationParts = [];
+
+            if (floor) locationParts.push(`ชั้น ${floor}`);
+            if (building) locationParts.push(building);
+
+            locationLine = locationParts.join(" ") || "ไม่ระบุสถานที่";
+        }
+
+        // แสดงข้อความความคิดเห็นเต็ม
+        const detail = String(item.Detail || "ไม่มีรายละเอียด")
+            .replace(/\r\n/g, "\n")
+            .replace(/\r/g, "\n")
+            .replace(/\\n/g, "\n")
+            .trim();
+
+        // รูปแนบ: รองรับทุกประเภทความคิดเห็น
+        const imageUrls = getFeedbackImageUrls(item);
+
+        const imageButtonHTML = imageUrls.length > 0
+            ? `
+        <button
+            type="button"
+            class="feedback-image-btn"
+            data-images="${encodeURIComponent(JSON.stringify(imageUrls))}">
+            <span class="material-symbols-rounded">image</span>
+            ดูรูปภาพที่แนบมา
+        </button>
+    `
+            : "";
+
+        return `
+            <article class="feedback-item">
+
+                <div class="feedback-item-header">
+    <div class="feedback-header-left">
+        <span class="feedback-type ${getFeedbackTypeClass(item.Category)}">
+            ${escapeFeedbackHtml(label)}
+        </span>
+
+        ${imageButtonHTML}
+    </div>
+
+    <span class="feedback-date">
+        ${escapeFeedbackHtml(dateTime)}
+    </span>
+</div>
+
+                <div class="feedback-department">
+                    ${escapeFeedbackHtml(department)}
+                </div>
+
+                ${locationLine ? `
+                    <div class="feedback-location">
+                        ${escapeFeedbackHtml(locationLine)}
+                    </div>
+                ` : ""}
+
+                <div class="feedback-detail-preview">
+                    ${escapeFeedbackHtml(detail)}
+                </div>
+
+            </article>
+        `;
+    }).join("");
+
+    // 10. สร้าง Pagination
+    renderFeedbackPagination(
+        totalPages,
+        startIndex,
+        endIndex,
+        totalItems
+    );
 }
 
-/* ==========================================
-   Image Modal
-========================================== */
 
-$("closeImageModal").addEventListener("click", () => {
+// ========================================
+// FEEDBACK PAGINATION
+// ========================================
 
-    $("imageModal").style.display = "none";
+function renderFeedbackPagination(
+    totalPages,
+    startIndex,
+    endIndex,
+    totalItems
+) {
+    const container = document.getElementById("feedbackPagination");
 
-});
+    if (!container) return;
 
-$("imageModal").addEventListener("click", e => {
-
-    if (e.target.id === "imageModal") {
-
-        $("imageModal").style.display = "none";
-
+    if (totalPages <= 1) {
+        container.innerHTML = "";
+        return;
     }
 
-});
+    // สร้างชุดเลขหน้าที่ต้องแสดง
+    let pages = [];
 
-/* ==========================================
-   Init
-========================================== */
+    if (totalPages <= 7) {
+        pages = Array.from(
+            { length: totalPages },
+            (_, i) => i + 1
+        );
+    } else {
+        const pageSet = new Set([
+            1,
+            totalPages,
+            currentFeedbackPage,
+            currentFeedbackPage - 1,
+            currentFeedbackPage + 1,
+            currentFeedbackPage - 2,
+            currentFeedbackPage + 2
+        ]);
 
-window.addEventListener("load", () => {
+        pages = [...pageSet]
+            .filter(page => page >= 1 && page <= totalPages)
+            .sort((a, b) => a - b);
+    }
 
-    preloadDepartments();
+    // เพิ่ม ... เมื่อมีช่วงเลขหน้าขาด
+    const pageItems = [];
 
-});
+    for (let i = 0; i < pages.length; i++) {
+        if (i > 0 && pages[i] - pages[i - 1] > 1) {
+            pageItems.push("ellipsis");
+        }
+
+        pageItems.push(pages[i]);
+    }
+
+    // ปุ่มก่อนหน้า
+    let html = `
+        <button
+            type="button"
+            data-page="${currentFeedbackPage - 1}"
+            aria-label="หน้าก่อนหน้า"
+            ${currentFeedbackPage === 1 ? "disabled" : ""}
+        >
+            ‹
+        </button>
+    `;
+
+    // ปุ่มเลขหน้า
+    pageItems.forEach(page => {
+        if (page === "ellipsis") {
+            html += `
+                <span class="pagination-ellipsis" aria-hidden="true">
+                    …
+                </span>
+            `;
+        } else {
+            html += `
+                <button
+                    type="button"
+                    data-page="${page}"
+                    class="${page === currentFeedbackPage ? "active" : ""}"
+                    ${page === currentFeedbackPage ? 'aria-current="page"' : ""}
+                >
+                    ${page.toLocaleString("th-TH")}
+                </button>
+            `;
+        }
+    });
+
+    // ปุ่มถัดไป
+    html += `
+        <button
+            type="button"
+            data-page="${currentFeedbackPage + 1}"
+            aria-label="หน้าถัดไป"
+            ${currentFeedbackPage === totalPages ? "disabled" : ""}
+        >
+            ›
+        </button>
+    `;
+
+    container.innerHTML = html;
+
+    // Event เปลี่ยนหน้า
+    container.onclick = event => {
+        const button = event.target.closest("button[data-page]");
+
+        if (!button || button.disabled) return;
+
+        const targetPage = Number(button.dataset.page);
+
+        if (
+            !Number.isInteger(targetPage) ||
+            targetPage < 1 ||
+            targetPage > totalPages ||
+            targetPage === currentFeedbackPage
+        ) {
+            return;
+        }
+
+        currentFeedbackPage = targetPage;
+
+        const fiscalYearFilter = document.getElementById("fiscalYearFilter");
+        const selectedYear = fiscalYearFilter
+            ? fiscalYearFilter.value
+            : "all";
+
+        renderFeedbackPreview(
+            feedbackData,
+            selectedYear,
+            feedbackCategoryFilter
+        );
+
+        // เลื่อนรายการความคิดเห็นกลับไปบนสุดเมื่อเปลี่ยนหน้า
+        const feedbackList = document.getElementById("feedbackPreviewList");
+
+        if (feedbackList) {
+            feedbackList.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+    };
+}
+
+// ==============================
+// แปลงประเภทเป็น CSS Class
+// ==============================
+
+function getFeedbackTypeClass(category) {
+    const label = getFeedbackCategoryLabel(category);
+
+    if (label === "คำชม") return "type-compliment";
+    if (label === "ข้อเสนอแนะ") return "type-suggestion";
+    if (label === "ข้อร้องเรียน") return "type-complaint";
+
+    return "type-other";
+}

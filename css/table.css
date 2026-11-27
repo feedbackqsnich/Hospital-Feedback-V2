@@ -1,0 +1,1611 @@
+/* ==========================================
+   TABLE
+   Feedback QSNICH Report v2.0
+========================================== */
+
+.table-card {
+
+    margin-top: 24px;
+
+}
+
+.table-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+
+}
+
+.table-title {
+
+    font-size: 21px;
+
+    font-weight: 600;
+
+    color: var(--text);
+
+}
+
+.table-subtitle {
+
+    font-size: 14px;
+
+    color: var(--subtext);
+
+}
+
+.table-wrapper {
+
+    overflow-x: auto;
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-md);
+
+}
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    background: #FFF;
+
+}
+
+thead {
+
+    background: #F8FBFF;
+
+}
+
+thead th {
+
+    padding: 16px;
+
+    text-align: left;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    color: var(--text);
+
+    border-bottom: 1px solid var(--border);
+
+}
+
+tbody td {
+
+    padding: 15px 16px;
+
+    font-size: 15px;
+
+    color: var(--text);
+
+    border-bottom: 1px solid #EEF4FA;
+
+    vertical-align: top;
+
+}
+
+tbody tr:last-child td {
+
+    border-bottom: none;
+
+}
+
+tbody tr:hover {
+
+    background: #FAFCFF;
+
+}
+
+/* Badge */
+
+.badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 4px 10px;
+
+    border-radius: 999px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+}
+
+.badge.success {
+
+    background: #E8F5E9;
+
+    color: var(--success);
+
+}
+
+.badge.warning {
+
+    background: #FFF8E1;
+
+    color: #F9A825;
+
+}
+
+.badge.danger {
+
+    background: #FFEBEE;
+
+    color: var(--danger);
+
+}
+
+/* ==============================
+   FEEDBACK PREVIEW LAYOUT
+============================== */
+
+.feedback-preview-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 8px;
+    max-height: 560px;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+/* หัวข้อ Feedback Preview */
+
+.feedback-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.feedback-preview-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.feedback-preview-subtitle {
+    font-size: 13px;
+    color: #000000;
+}
+
+/* Feedback Card */
+
+.feedback-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #FFFFFF;
+}
+
+/* Header: ประเภท + วันที่เวลา */
+
+.feedback-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+/* วันที่และเวลา */
+
+.feedback-date {
+    font-size: 15px;
+    color: var(--subtext);
+    white-space: nowrap;
+}
+
+/* ประเภทความคิดเห็น */
+
+.feedback-type {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+/* คำชม - สีเขียว */
+
+.feedback-type.type-compliment {
+    background: #E8F5E9;
+    color: #2E7D32;
+}
+
+/* ข้อเสนอแนะ - สีเหลือง */
+
+.feedback-type.type-suggestion {
+    background: #FFF3D6;
+    color: #9A6500;
+}
+
+/* ข้อร้องเรียน - สีแดง */
+
+.feedback-type.type-complaint {
+    background: #FFEBEE;
+    color: #C62828;
+}
+
+/* ประเภทอื่น */
+
+.feedback-type.type-other {
+    background: #EDF1F5;
+    color: #586574;
+}
+
+/* ชื่อหน่วยงาน */
+
+.feedback-department {
+    font-size: 15px;
+    line-height: 1.45;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 3px;
+}
+
+/* ชั้นและอาคาร */
+
+.feedback-location {
+    font-size: 12px;
+    line-height: 1.45;
+    color: #000000;
+    margin-bottom: 8px;
+}
+
+/* รายละเอียดความคิดเห็น - สูงสุด 2 บรรทัด */
+
+.feedback-detail-preview {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text);
+
+    overflow-wrap: anywhere;
+}
+
+/* ==============================
+   FEEDBACK FILTER BUTTONS
+============================== */
+
+.feedback-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0 16px;
+}
+
+.feedback-filter-btn {
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 7px 14px;
+    background: #FFFFFF;
+    color: #000000;
+
+    font-family: var(--font-family);
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.feedback-filter-btn:hover {
+    background: #F5F9FF;
+}
+
+/* ทั้งหมด */
+
+.feedback-filter-btn.active {
+    background: var(--primary);
+    color: #FFFFFF;
+    border-color: var(--primary);
+}
+
+/* คำชม */
+
+.feedback-filter-btn.filter-compliment.active {
+    background: #2E7D32;
+    border-color: #2E7D32;
+    color: #FFFFFF;
+}
+
+/* ข้อเสนอแนะ */
+
+.feedback-filter-btn.filter-suggestion.active {
+    background: #ED9B00;
+    border-color: #ED9B00;
+    color: #FFFFFF;
+}
+
+/* ข้อร้องเรียน */
+
+.feedback-filter-btn.filter-complaint.active {
+    background: #D32F2F;
+    border-color: #D32F2F;
+    color: #FFFFFF;
+}
+
+/* ==============================
+   FEEDBACK VIEW BUTTON
+============================== */
+
+.feedback-view-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    margin-top: 8px;
+    margin-left: auto;
+    padding: 5px 0;
+
+    border: none;
+    background: transparent;
+
+    color: var(--primary);
+    font-family: var(--font-family);
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+/* ==============================
+   EMPTY STATE
+============================== */
+
+.feedback-empty {
+    padding: 24px 12px;
+    text-align: center;
+    color: var(--subtext);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+}
+
+/* ==============================
+   RESPONSIVE
+============================== */
+
+@media (max-width: 600px) {
+
+    .feedback-item {
+        padding: 12px;
+    }
+
+    .feedback-item-header {
+        gap: 6px;
+    }
+
+    .feedback-date {
+        font-size: 11px;
+    }
+
+    .feedback-type {
+        font-size: 11px;
+        padding: 3px 8px;
+    }
+
+    .feedback-department {
+        font-size: 14px;
+    }
+
+    .feedback-detail-preview {
+        font-size: 13px;
+    }
+
+    .feedback-filter-btn {
+        padding: 6px 11px;
+        font-size: 13px;
+    }
+}
+
+/* ปุ่มดูความคิดเห็นทั้งหมด */
+
+.feedback-more-link {
+    text-decoration: none;
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.feedback-more-link:hover {
+    text-decoration: underline;
+}
+
+/* ==============================
+   FEEDBACK DETAIL MODAL
+============================== */
+
+.feedback-modal[hidden] {
+    display: none !important;
+}
+
+.feedback-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.feedback-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 30, 50, 0.55);
+    backdrop-filter: blur(3px);
+}
+
+.feedback-modal-dialog {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 700px;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: #FFFFFF;
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    animation: feedbackModalIn 0.2s ease;
+}
+
+.feedback-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: #FFFFFF;
+    z-index: 2;
+}
+
+.feedback-modal-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.feedback-modal-close {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: #F1F5F9;
+    color: #64748B;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.feedback-modal-close:hover {
+    background: #E2E8F0;
+    color: #1E293B;
+}
+
+.feedback-modal-content {
+    padding: 24px;
+}
+
+.feedback-modal-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 18px;
+}
+
+.feedback-modal-department {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.feedback-modal-location {
+    font-size: 13px;
+    color: #000000;
+}
+
+.feedback-modal-date {
+    font-size: 12px;
+    color: var(--subtext);
+    margin-top: 4px;
+}
+
+.feedback-modal-detail {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--text);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    padding: 18px;
+    background: #F8FAFC;
+    border-radius: 12px;
+    border: 1px solid #EEF2F6;
+}
+
+@keyframes feedbackModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 600px) {
+
+    .feedback-modal {
+        padding: 12px;
+    }
+
+    .feedback-modal-dialog {
+        max-height: 90vh;
+        border-radius: 14px;
+    }
+
+    .feedback-modal-header {
+        padding: 16px;
+    }
+
+    .feedback-modal-content {
+        padding: 16px;
+    }
+
+    .feedback-modal-detail {
+        padding: 14px;
+        font-size: 14px;
+    }
+}
+
+.feedback-full-item {
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.feedback-full-item:hover {
+    border-color: var(--primary);
+    box-shadow: 0 4px 14px rgba(30, 120, 220, 0.08);
+    transform: translateY(-1px);
+}
+
+.feedback-full-item:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* ==============================
+   HOMEPAGE FEEDBACK PREVIEW
+============================== */
+
+/* ปุ่มดูความคิดเห็นทั้งหมด */
+#viewAllFeedbackBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border: 1px solid var(--primary);
+    border-radius: 10px;
+    background: var(--primary);
+    color: #fff !important;
+    text-decoration: none !important;
+    font-family: var(--font-family);
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+#viewAllFeedbackBtn:hover {
+    filter: brightness(0.95);
+    box-shadow: 0 3px 10px rgba(36, 127, 229, 0.18);
+    transform: translateY(-1px);
+}
+
+#viewAllFeedbackBtn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+}
+
+
+/* ==========================================
+   TABLE
+   Feedback QSNICH Report v2.0
+========================================== */
+
+.table-card {
+    margin-top: 24px;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.table-title {
+    font-size: 21px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.table-subtitle {
+    font-size: 14px;
+    color: var(--subtext);
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #FFF;
+}
+
+thead {
+    background: #F8FBFF;
+}
+
+thead th {
+    padding: 16px;
+    text-align: left;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+}
+
+tbody td {
+    padding: 15px 16px;
+    font-size: 15px;
+    color: var(--text);
+    border-bottom: 1px solid #EEF4FA;
+    vertical-align: top;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background: #FAFCFF;
+}
+
+/* Badge */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.badge.success {
+    background: #E8F5E9;
+    color: var(--success);
+}
+
+.badge.warning {
+    background: #FFF8E1;
+    color: #F9A825;
+}
+
+.badge.danger {
+    background: #FFEBEE;
+    color: var(--danger);
+}
+
+/* ==============================
+   FEEDBACK PREVIEW LAYOUT
+============================== */
+
+.feedback-preview-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 8px;
+    max-height: 560px;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+/* หัวข้อ Feedback Preview */
+
+.feedback-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.feedback-preview-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.feedback-preview-subtitle {
+    font-size: 13px;
+    color: #000000;
+}
+
+/* Feedback Card */
+
+.feedback-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #FFFFFF;
+}
+
+/* Header: ประเภท + วันที่เวลา */
+
+.feedback-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+/* วันที่และเวลา */
+
+.feedback-date {
+    font-size: 14px;
+    color: #000000;
+    white-space: nowrap;
+}
+
+/* ประเภทความคิดเห็น */
+
+.feedback-type {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+/* คำชม - สีเขียว */
+
+.feedback-type.type-compliment {
+    background: #E8F5E9;
+    color: #2E7D32;
+}
+
+/* ข้อเสนอแนะ - สีเหลือง */
+
+.feedback-type.type-suggestion {
+    background: #FFF3D6;
+    color: #9A6500;
+}
+
+/* ข้อร้องเรียน - สีแดง */
+
+.feedback-type.type-complaint {
+    background: #FFEBEE;
+    color: #C62828;
+}
+
+/* ประเภทอื่น */
+
+.feedback-type.type-other {
+    background: #EDF1F5;
+    color: #586574;
+}
+
+/* ชื่อหน่วยงาน */
+
+.feedback-department {
+    font-size: 15px;
+    line-height: 1.45;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 3px;
+}
+
+/* ชั้นและอาคาร */
+
+.feedback-location {
+    font-size: 14px;
+    line-height: 1.45;
+    color: #000000;
+    margin-bottom: 8px;
+}
+
+/* รายละเอียดความคิดเห็น - สูงสุด 2 บรรทัด */
+
+.feedback-detail-preview {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text);
+    overflow-wrap: anywhere;
+}
+
+/* ==============================
+   FEEDBACK FILTER BUTTONS
+============================== */
+
+.feedback-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0 16px;
+}
+
+.feedback-filter-btn {
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 7px 14px;
+    background: #FFFFFF;
+    color: var(--subtext);
+    font-family: var(--font-family);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.feedback-filter-btn:hover {
+    background: #F5F9FF;
+}
+
+/* ทั้งหมด */
+
+.feedback-filter-btn.active {
+    background: var(--primary);
+    color: #FFFFFF;
+    border-color: var(--primary);
+}
+
+/* คำชม */
+
+.feedback-filter-btn.filter-compliment.active {
+    background: #2E7D32;
+    border-color: #2E7D32;
+    color: #FFFFFF;
+}
+
+/* ข้อเสนอแนะ */
+
+.feedback-filter-btn.filter-suggestion.active {
+    background: #ED9B00;
+    border-color: #ED9B00;
+    color: #FFFFFF;
+}
+
+/* ข้อร้องเรียน */
+
+.feedback-filter-btn.filter-complaint.active {
+    background: #D32F2F;
+    border-color: #D32F2F;
+    color: #FFFFFF;
+}
+
+/* ==============================
+   FEEDBACK VIEW BUTTON
+============================== */
+
+.feedback-view-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 8px;
+    margin-left: auto;
+    padding: 5px 0;
+    border: none;
+    background: transparent;
+    color: var(--primary);
+    font-family: var(--font-family);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+/* ==============================
+   EMPTY STATE
+============================== */
+
+.feedback-empty {
+    padding: 24px 12px;
+    text-align: center;
+    color: var(--subtext);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+}
+
+/* ==============================
+   RESPONSIVE
+============================== */
+
+@media (max-width: 600px) {
+    .feedback-item {
+        padding: 12px;
+    }
+
+    .feedback-item-header {
+        gap: 6px;
+    }
+
+    .feedback-date {
+        font-size: 11px;
+    }
+
+    .feedback-type {
+        font-size: 11px;
+        padding: 3px 8px;
+    }
+
+    .feedback-department {
+        font-size: 14px;
+    }
+
+    .feedback-detail-preview {
+        font-size: 13px;
+    }
+
+    .feedback-filter-btn {
+        padding: 6px 11px;
+        font-size: 13px;
+    }
+}
+
+/* ปุ่มดูความคิดเห็นทั้งหมด */
+
+.feedback-more-link {
+    text-decoration: none;
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.feedback-more-link:hover {
+    text-decoration: underline;
+}
+
+/* ==============================
+   FEEDBACK DETAIL MODAL
+============================== */
+
+.feedback-modal[hidden] {
+    display: none !important;
+}
+
+.feedback-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.feedback-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 30, 50, 0.55);
+    backdrop-filter: blur(3px);
+}
+
+.feedback-modal-dialog {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 700px;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: #FFFFFF;
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    animation: feedbackModalIn 0.2s ease;
+}
+
+.feedback-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: #FFFFFF;
+    z-index: 2;
+}
+
+.feedback-modal-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.feedback-modal-close {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: #F1F5F9;
+    color: #64748B;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.feedback-modal-close:hover {
+    background: #E2E8F0;
+    color: #1E293B;
+}
+
+.feedback-modal-content {
+    padding: 24px;
+}
+
+.feedback-modal-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 18px;
+}
+
+.feedback-modal-department {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.feedback-modal-location {
+    font-size: 13px;
+    color: #000000;
+}
+
+.feedback-modal-date {
+    font-size: 12px;
+    color: var(--subtext);
+    margin-top: 4px;
+}
+
+.feedback-modal-detail {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--text);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    padding: 18px;
+    background: #F8FAFC;
+    border-radius: 12px;
+    border: 1px solid #EEF2F6;
+}
+
+@keyframes feedbackModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 600px) {
+    .feedback-modal {
+        padding: 12px;
+    }
+
+    .feedback-modal-dialog {
+        max-height: 90vh;
+        border-radius: 14px;
+    }
+
+    .feedback-modal-header {
+        padding: 16px;
+    }
+
+    .feedback-modal-content {
+        padding: 16px;
+    }
+
+    .feedback-modal-detail {
+        padding: 14px;
+        font-size: 14px;
+    }
+}
+
+.feedback-full-item {
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.feedback-full-item:hover {
+    border-color: var(--primary);
+    box-shadow: 0 4px 14px rgba(30, 120, 220, 0.08);
+    transform: translateY(-1px);
+}
+
+.feedback-full-item:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* ==============================
+   HOMEPAGE FEEDBACK PREVIEW
+============================== */
+
+/* ปุ่มดูความคิดเห็นทั้งหมด */
+#viewAllFeedbackBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border: 1px solid var(--primary);
+    border-radius: 10px;
+    background: var(--primary);
+    color: #fff !important;
+    text-decoration: none !important;
+    font-family: var(--font-family);
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+#viewAllFeedbackBtn:hover {
+    filter: brightness(0.95);
+    box-shadow: 0 3px 10px rgba(36, 127, 229, 0.18);
+    transform: translateY(-1px);
+}
+
+#viewAllFeedbackBtn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid #DCE8F5;
+    border-top-color: #2585E5;
+    border-radius: 50%;
+    animation: dashboardSpin 0.8s linear infinite;
+    vertical-align: middle;
+}
+
+.dashboard-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 40px 16px;
+    color: #000000;
+    font-size: 14px;
+}
+
+@keyframes dashboardSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ==============================
+   LOADING SPINNER
+============================== */
+
+.loading-spinner {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid #DCE8F5;
+    border-top-color: #2585E5;
+    border-radius: 50%;
+    animation: dashboardSpin 0.8s linear infinite;
+    flex-shrink: 0;
+}
+
+.dashboard-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 40px 16px;
+    color: #000;
+    font-size: 14px;
+}
+
+@keyframes dashboardSpin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* LOADING GRAPH */
+
+.chart-loading {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.85);
+    z-index: 10;
+}
+
+html {
+    scrollbar-gutter: stable;
+}
+
+/* =================================
+   FEEDBACK PAGINATION - SQUARE BUTTONS
+================================= */
+
+.feedback-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+}
+
+.feedback-pagination button,
+.feedback-pagination a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 38px;
+    height: 38px;
+    padding: 0 10px;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: var(--text);
+
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.feedback-pagination button:hover,
+.feedback-pagination a:hover {
+    background: #F0F7FF;
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+/* หน้าที่กำลังเลือก */
+.feedback-pagination .active,
+.feedback-pagination button.active,
+.feedback-pagination a.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #FFFFFF;
+}
+
+/* ปุ่มที่กดไม่ได้ */
+.feedback-pagination button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* ===== ปรับช่องค้นหาให้ชิดด้านบน ===== */
+.feedback-page-toolbar {
+    margin-top: 4px !important;
+    margin-bottom: 16px !important;
+}
+
+/* ===== ปรับปุ่มกลับ Dashboard ให้ชัดเจน ===== */
+.feedback-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #FFFFFF;
+    color: var(--primary);
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.feedback-back-link:hover {
+    background: #EAF4FF;
+    border-color: var(--primary);
+    box-shadow: 0 2px 8px rgba(37, 133, 229, 0.12);
+}
+
+.feedback-page-toolbar {
+    display: flex;
+    width: 100%;
+    margin: 16px 0;
+}
+
+.feedback-search-box {
+    width: 100%;
+    max-width: 420px;
+}
+
+.feedback-search-box input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #FFFFFF;
+    color: var(--text);
+    font-family: var(--font-family);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feedback-search-box input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 133, 229, 0.10);
+}
+
+.feedback-search-box input::placeholder {
+    color: var(--subtext);
+}
+
+@media (max-width: 600px) {
+    .feedback-page-toolbar {
+        width: 100%;
+    }
+
+    .feedback-search-box {
+        max-width: none;
+    }
+}
+
+/* ==========================================
+   FEEDBACK TOOLBAR - SEARCH + FILTERS
+========================================== */
+
+.feedback-page-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    margin: 14px 0 16px;
+}
+
+/* ช่องค้นหาอยู่ซ้ายและขยายพื้นที่ */
+.feedback-search-box {
+    flex: 1;
+    min-width: 0;
+}
+
+.feedback-search-box input {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    height: 42px;
+    padding: 0 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #FFFFFF;
+    color: var(--text);
+    font-family: var(--font-family);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feedback-search-box input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 133, 229, 0.10);
+}
+
+.feedback-search-box input::placeholder {
+    color: var(--subtext);
+}
+
+/* ตัวกรอง 4 ปุ่มอยู่ขวา */
+.feedback-page-toolbar .feedback-filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    gap: 8px;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+/* ป้องกันปุ่มถูกบีบ */
+.feedback-page-toolbar .feedback-filter-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+/* Tablet / มือถือ: ให้ค้นหาอยู่ด้านบน ปุ่มอยู่ด้านล่าง */
+@media (max-width: 850px) {
+    .feedback-page-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .feedback-search-box {
+        width: 100%;
+    }
+
+    .feedback-page-toolbar .feedback-filter-bar {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+}
+
+/* มือถือจอเล็ก */
+@media (max-width: 480px) {
+    .feedback-page-toolbar .feedback-filter-bar {
+        gap: 6px;
+    }
+
+    .feedback-page-toolbar .feedback-filter-btn {
+        padding: 7px 11px;
+        font-size: 13px;
+    }
+}
+
+/* ========================================
+   FEEDBACK IMAGE BUTTON - HEADER PILL
+======================================== */
+
+.feedback-header-left {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+    min-width: 0;
+}
+
+.feedback-image-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    width: auto;
+    height: 27px;
+    margin: 0;
+    padding: 0 10px;
+
+    border: 1px solid #d7e4f7;
+    border-radius: 999px;
+
+    background: #f3f7ff;
+    color: #3975cc;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+
+    cursor: pointer;
+    transition: background .2s, border-color .2s, color .2s;
+}
+
+.feedback-image-btn:hover {
+    background: #e7f0ff;
+    border-color: #b7d0f5;
+    color: #245da8;
+}
+
+.feedback-image-btn:active {
+    transform: scale(.97);
+}
+
+.feedback-image-btn .material-symbols-rounded {
+    font-size: 16px;
+    line-height: 1;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .feedback-item-header {
+        align-items: flex-start;
+    }
+
+    .feedback-header-left {
+        gap: 6px;
+    }
+
+    .feedback-image-btn {
+        height: 26px;
+        padding: 0 8px;
+        font-size: 11px;
+    }
+}
+
+/* Image modal close button - centered X, stays right */
+.feedback-image-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 18px;
+    z-index: 10;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    margin: 0;
+
+    border: none;
+    border-radius: 50%;
+    box-sizing: border-box;
+
+    line-height: 1;
+    text-align: center;
+
+    float: none;
+    transform: none;
+}
+
+.feedback-image-modal-close {
+    padding-bottom: 6px;
+}

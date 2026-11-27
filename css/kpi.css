@@ -1,0 +1,277 @@
+/* ==========================================
+   KPI
+========================================== */
+
+.summary-section {
+
+    margin-top: 10px;
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 22px;
+
+}
+
+.summary-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius-lg);
+
+    padding: 26px;
+
+    text-align: center;
+
+    box-shadow: var(--shadow-md);
+
+    transition: .25s;
+
+}
+
+.summary-card:hover {
+
+    transform: translateY(-5px);
+
+}
+
+.summary-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    top: 0;
+
+    width: 100%;
+
+    height: 5px;
+
+}
+
+/* สีแถบด้านบน */
+
+.compliment::before {
+
+    background: var(--success);
+
+}
+
+.suggestion::before {
+
+    background: #F59E0B;
+
+}
+
+.complaint::before {
+
+    background: var(--danger);
+
+}
+
+.total::before {
+
+    background: var(--primary);
+
+}
+
+/* Icon */
+
+.summary-icon {
+
+    width: 64px;
+
+    height: 64px;
+
+    margin: auto;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+}
+
+.compliment .summary-icon {
+
+    background: #E8F5E9;
+
+}
+
+.suggestion .summary-icon {
+
+    background: #FFF3E0;
+
+}
+
+.complaint .summary-icon {
+
+    background: #FFEBEE;
+
+}
+
+.total .summary-icon {
+
+    background: #EAF5FF;
+
+}
+
+.summary-icon .material-symbols-rounded {
+
+    font-size: 34px;
+
+}
+
+/* สี Icon */
+
+.compliment .material-symbols-rounded {
+
+    color: var(--success);
+
+}
+
+.suggestion .material-symbols-rounded {
+
+    color: #F59E0B;
+
+}
+
+.complaint .material-symbols-rounded {
+
+    color: var(--danger);
+
+}
+
+.total .material-symbols-rounded {
+
+    color: var(--primary);
+
+}
+
+/* หัวข้อ KPI */
+
+.summary-title {
+
+    margin-top: 18px;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    color: #000000;
+
+}
+
+/* ตัวเลข KPI */
+
+.summary-value {
+
+    margin-top: 10px;
+
+    font-size: 50px;
+
+    font-weight: 700;
+
+    line-height: 1;
+
+    color: var(--text);
+
+}
+
+/* ข้อความรอง */
+
+.summary-trend {
+
+    margin-top: 14px;
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+}
+
+/* สีข้อความแนวโน้ม */
+
+.summary-trend.up {
+
+    color: var(--success);
+
+}
+
+.summary-trend.down {
+
+    color: #EF6C00;
+
+}
+
+.summary-trend.neutral {
+
+    color: #000000;
+
+}
+
+/* ==========================================
+   KPI NUMBER COLORS
+========================================== */
+
+.compliment .summary-value {
+
+    color: var(--success);
+
+}
+
+.suggestion .summary-value {
+
+    color: #F59E0B;
+
+}
+
+.complaint .summary-value {
+
+    color: var(--danger);
+
+}
+
+.total .summary-value {
+
+    color: var(--primary);
+
+}
+
+/* ========================================
+   KPI CARD ANIMATION
+======================================== */
+
+.summary-card {
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* ไอคอนขยับเบา ๆ */
+.summary-card i,
+.summary-card svg {
+    transition: transform 0.25s ease;
+}
+
+.summary-card:hover i,
+.summary-card:hover svg {
+    transform: scale(1.08);
+}

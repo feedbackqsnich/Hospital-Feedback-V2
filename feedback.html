@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ความคิดเห็นจากผู้รับบริการ | QSNICH</title>
+
+    <!-- ใช้ CSS ของ Dashboard เดิม -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/table.css">
+
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+
+        /* ==============================
+       MAIN PAGE
+    ============================== */
+
+        .feedback-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+            font-family: 'Sarabun', sans-serif !important;
+        }
+
+        .feedback-page,
+        .feedback-page * {
+            font-family: 'Sarabun', sans-serif !important;
+        }
+
+        .feedback-page-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .feedback-back-link {
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .feedback-page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0;
+        }
+
+        .feedback-page-description {
+            color: var(--subtext);
+            font-size: 15px;
+            margin-top: 6px;
+        }
+
+        .feedback-page-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        /* ==============================
+       SEARCH & FILTER
+    ============================== */
+
+        .feedback-page-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .feedback-search {
+            flex: 1;
+            min-width: 220px;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .feedback-search:focus {
+            border-color: var(--primary);
+        }
+
+        .feedback-year-select {
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 15px;
+            background: #FFFFFF;
+        }
+
+        .feedback-page-filters {
+            margin-bottom: 18px;
+        }
+
+        .feedback-results-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin: 12px 0;
+            font-size: 15px;
+            color: var(--subtext);
+        }
+
+        /* ==============================
+   FEEDBACK LIST
+   ใช้รูปแบบเดียวกับหน้า Dashboard
+============================== */
+
+        .feedback-full-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        /* การ์ดความคิดเห็น */
+        .feedback-page .feedback-full-item {
+            display: flex !important;
+            flex-direction: column !important;
+            padding: 14px 16px !important;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #FFFFFF;
+        }
+
+        /* Header: ประเภท + วันที่ */
+        .feedback-page .feedback-item-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 8px !important;
+        }
+
+        /* วันที่ */
+        .feedback-page .feedback-date {
+            font-size: 14px;
+            color: #000000;
+            white-space: nowrap;
+        }
+
+        /* ประเภทความคิดเห็น */
+        .feedback-page .feedback-type {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.4;
+            white-space: nowrap;
+        }
+
+        /* คำชม */
+        .feedback-page .feedback-type.type-compliment {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        /* ข้อเสนอแนะ */
+        .feedback-page .feedback-type.type-suggestion {
+            background: #FFF3D6;
+            color: #9A6500;
+        }
+
+        /* ข้อร้องเรียน */
+        .feedback-page .feedback-type.type-complaint {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+
+        /* ประเภทอื่น */
+        .feedback-page .feedback-type.type-other {
+            background: #EDF1F5;
+            color: #586574;
+        }
+
+        /* ชื่อหน่วยงาน */
+        .feedback-page .feedback-department {
+            font-size: 15px;
+            line-height: 1.45 !important;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        /* ชั้นและอาคาร */
+        .feedback-page .feedback-location {
+            font-size: 14px !important;
+            line-height: 1.45 !important;
+            color: #000000;
+            margin: 0 0 8px !important;
+            padding: 0 !important;
+        }
+
+        /* เนื้อหาความคิดเห็น แสดงเต็ม ไม่ตัดข้อความ */
+        .feedback-page .feedback-full-detail {
+            font-size: 15px;
+            line-height: 1.7 !important;
+            color: var(--text);
+            display: block !important;
+            overflow: visible !important;
+            -webkit-line-clamp: unset !important;
+            -webkit-box-orient: unset !important;
+            white-space: pre-line !important;
+            overflow-wrap: anywhere;
+            text-indent: 0 !important;
+            text-align: left !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        /* ไม่ให้ paragraph เพิ่มช่องว่าง */
+        .feedback-page .feedback-full-detail p {
+            margin: 0 !important;
+            padding: 0 !important;
+            text-indent: 0 !important;
+        }
+
+        /* รูปภาพแนบ */
+        .feedback-page .feedback-image-banner {
+            margin-top: 12px;
+        }
+
+        /* ==============================
+       CARD FOOTER
+    ============================== */
+
+        .feedback-full-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            gap: 10px;
+        }
+
+        /* ==============================
+       LOAD MORE
+    ============================== */
+
+        .feedback-load-more {
+            display: block;
+            margin: 24px auto 0;
+            padding: 10px 24px;
+            border: 1px solid var(--primary);
+            border-radius: 999px;
+            background: #FFFFFF;
+            color: var(--primary);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .feedback-load-more:hover {
+            background: var(--primary);
+            color: #FFFFFF;
+        }
+
+        .feedback-load-more:disabled {
+            display: none;
+        }
+
+        /* ==============================
+       IMAGE ATTACHMENT BANNER
+    ============================== */
+
+        .feedback-image-banner {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: fit-content;
+            max-width: 100%;
+            margin-top: 14px;
+            padding: 10px 14px;
+            border: 1px solid #D9EAF8;
+            border-radius: 10px;
+            background: #F3F8FF;
+            color: #2875C7;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: left;
+            transition: 0.2s ease;
+            cursor: pointer;
+        }
+
+        .feedback-image-banner:hover {
+            background: #E8F3FF;
+            border-color: #B7D7F7;
+        }
+
+        .feedback-image-banner-icon {
+            font-size: 18px;
+        }
+
+        .feedback-image-banner-arrow {
+            margin-left: 4px;
+            font-size: 20px;
+        }
+
+        /* ==============================
+       IMAGE VIEWER MODAL
+    ============================== */
+
+        .feedback-image-modal-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+            padding: 8px;
+        }
+
+        .feedback-image-modal-img {
+            display: block;
+            max-width: 100%;
+            max-height: 75vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 10px;
+            background: #F5F7FA;
+        }
+
+        /* ==============================
+       RESPONSIVE
+    ============================== */
+
+        @media (max-width: 600px) {
+            .feedback-page {
+                padding: 12px;
+            }
+
+            .feedback-page-card {
+                padding: 14px;
+            }
+
+            .feedback-page-title {
+                font-size: 20px;
+            }
+
+            .feedback-results-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .feedback-page .feedback-full-item {
+                padding: 12px;
+            }
+
+            .feedback-image-banner {
+                font-size: 13px;
+                padding: 8px 12px;
+            }
+        }
+
+        .feedback-page .feedback-no-location {
+            margin-top: 4px !important;
+        }
+
+        .feedback-page-card {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .feedback-page-card * {
+            box-sizing: border-box;
+        }
+
+        .feedback-image-banner span small {
+    color: #8BA9C8;
+    font-size: 14px;
+    font-weight: 1000;
+}
+    </style>
+
+</head>
+
+<body>
+
+    <main class="feedback-page">
+
+        <!-- Header -->
+        <header class="feedback-page-header">
+            <a href="index.html" class="feedback-back-link">← กลับหน้า Dashboard</a>
+        </header>
+
+        <div style="margin-bottom:20px;">
+            <h1 class="feedback-page-title">ความคิดเห็นจากผู้รับบริการ</h1>
+            <div class="feedback-page-description">
+                ดูความคิดเห็น คำชม ข้อเสนอแนะ และข้อร้องเรียนทั้งหมด
+            </div>
+        </div>
+
+        <section class="feedback-page-card">
+
+            <!-- Search + ปีงบประมาณ -->
+            <div class="feedback-page-toolbar">
+
+                <input type="search" id="feedbackSearch" class="feedback-search"
+                    placeholder="ค้นหาหน่วยงาน หรือข้อความความคิดเห็น...">
+
+                <select id="feedbackYearFilter" class="feedback-year-select">
+                    <option value="all">ทุกปีงบประมาณ</option>
+                    <option value="2569">ปีงบประมาณ 2569</option>
+                    <option value="2570">ปีงบประมาณ 2570</option>
+                </select>
+
+            </div>
+
+            <!-- Category filters -->
+            <div class="feedback-filter-bar feedback-page-filters">
+
+                <button class="feedback-filter-btn active" data-category="all" aria-pressed="true">
+                    ทั้งหมด
+                </button>
+
+                <button class="feedback-filter-btn filter-compliment" data-category="compliment" aria-pressed="false">
+                    คำชม
+                </button>
+
+                <button class="feedback-filter-btn filter-suggestion" data-category="suggestion" aria-pressed="false">
+                    ข้อเสนอแนะ
+                </button>
+
+                <button class="feedback-filter-btn filter-complaint" data-category="complaint" aria-pressed="false">
+                    ข้อร้องเรียน
+                </button>
+
+            </div>
+
+            <!-- Result count -->
+            <div class="feedback-results-info">
+                <span id="feedbackResultsCount">กำลังโหลดข้อมูล...</span>
+                <span>เรียงจากความคิดเห็นล่าสุด</span>
+            </div>
+
+            <!-- List -->
+            <div id="feedbackFullList" class="feedback-full-list"></div>
+
+            <!-- Pagination -->
+            <div id="feedbackPagination" class="feedback-pagination"></div>
+            <!-- Feedback Detail Modal -->
+            <div id="feedbackDetailModal" class="feedback-modal" hidden>
+
+                <div class="feedback-modal-backdrop"></div>
+
+                <div class="feedback-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="feedbackModalTitle">
+
+                    <div class="feedback-modal-header">
+                        <h2 id="feedbackModalTitle">รายละเอียดความคิดเห็น</h2>
+
+                        <button type="button" id="feedbackModalClose" class="feedback-modal-close" aria-label="ปิด">
+                            &times;
+                        </button>
+                    </div>
+
+                    <div id="feedbackModalContent" class="feedback-modal-content">
+                        <!-- รายละเอียดจะถูกใส่ด้วย JavaScript -->
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/feedback.js"></script>
+
+</body>
+
+</html>

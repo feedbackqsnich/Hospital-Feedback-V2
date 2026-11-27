@@ -1,0 +1,77 @@
+/* ==========================================
+   VARIABLES
+   Feedback QSNICH Report v2.0
+========================================== */
+
+:root {
+
+    /* Brand */
+
+    --primary: #1E88E5;
+    --primary-light: #EAF5FF;
+
+    /* Status */
+
+    --success: #43A047;
+    --warning: #FBC02D;
+    --danger: #E53935;
+
+    /* Background */
+
+    --background: #F5F9FF;
+    --surface: #FFFFFF;
+
+    /* Border */
+
+    --border: #D9EAF8;
+
+    /* Text */
+
+    --text: #263238;
+    --subtext: #607D8B;
+    --muted: #90A4AE;
+
+    /* Radius */
+
+    --radius-sm: 12px;
+    --radius-md: 18px;
+    --radius-lg: 22px;
+    --radius-xl: 28px;
+
+    /* Shadow */
+
+    --shadow-sm: 0 4px 12px rgba(30, 136, 229, .05);
+
+    --shadow-md: 0 8px 24px rgba(30, 136, 229, .08);
+
+    --shadow-lg: 0 12px 32px rgba(30, 136, 229, .10);
+
+    /* Transition */
+
+    --transition: .25s ease;
+
+    /* Spacing */
+
+    --space-1: 8px;
+    --space-2: 16px;
+    --space-3: 24px;
+    --space-4: 32px;
+    --space-5: 40px;
+    --space-6: 48px;
+
+    /* Font */
+
+    --font-family: "Sarabun", sans-serif;
+
+    --font-xs: 13px;
+    --font-sm: 14px;
+    --font-md: 16px;
+    --font-lg: 18px;
+    --font-xl: 21px;
+    --font-2xl: 38px;
+
+    /* KPI */
+
+    --kpi-number: 50px;
+
+}

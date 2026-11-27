@@ -1,0 +1,48 @@
+/* ==========================================
+   FOOTER
+   Feedback QSNICH Report v2.0
+========================================== */
+
+.footer {
+
+    margin-top: 56px;
+
+    padding-top: 24px;
+
+    text-align: center;
+
+    border-top: 1px solid var(--border);
+
+    color: #475569;
+
+}
+
+.footer div {
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+}
+
+.footer small {
+
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 14px;
+
+}
+
+.footer span {
+
+    display: block;
+
+    margin-top: 8px;
+
+    font-size: 13px;
+
+    letter-spacing: .4px;
+
+}

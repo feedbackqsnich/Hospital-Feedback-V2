@@ -1,0 +1,154 @@
+
+/* ==========================================
+   HEADER
+   Feedback QSNICH Report v2.0
+========================================== */
+
+.hero {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+
+    padding: 10px 36px;
+
+    background: linear-gradient(135deg, #FFFFFF 0%, #F0F7FF 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+}
+
+/* ---------- Left Section ---------- */
+
+.hero-left {
+
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+}
+
+.hero-logo {
+
+    width: 48px;
+    flex-shrink: 0;
+
+}
+
+.hero-title h1 {
+
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 2px;
+
+}
+
+.hero-title h2 {
+
+    font-size: 16px;
+    font-weight: 400;
+    color: #64748B;
+
+}
+
+/* ---------- Right Section ---------- */
+
+.hero-right {
+
+    flex-shrink: 0;
+
+}
+
+/* ---------- Update Card ---------- */
+
+.update-card {
+
+    min-width: 250px;
+
+    padding: 8px 14px;
+
+    background: rgba(255, 255, 255, 0.8);
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    box-shadow: 0 4px 12px rgba(30, 136, 229, 0.06);
+
+}
+
+.update-title {
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-bottom: 4px;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    color: var(--subtext);
+
+}
+
+.update-dot {
+
+    width: 10px;
+    height: 10px;
+
+    border-radius: 50%;
+
+    background: var(--success);
+
+    animation: pulse 2s infinite;
+
+}
+
+.update-card strong {
+
+    display: block;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    color: var(--text);
+
+}
+
+.update-card span:last-child {
+
+    display: block;
+
+    margin-top: 2px;
+
+    font-size: 12px;
+
+    color: var(--subtext);
+
+}
+
+/* ---------- Animation ---------- */
+
+@keyframes pulse {
+
+    0% {
+        box-shadow: 0 0 0 0 rgba(67, 160, 71, .45);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(67, 160, 71, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(67, 160, 71, 0);
+    }
+
+}

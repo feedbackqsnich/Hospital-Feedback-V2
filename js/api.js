@@ -1,125 +1,145 @@
-/* ==========================================
-   API URL
-========================================== */
 
-const API = {
+const API_URL =
+    "https://script.google.com/macros/s/AKfycbyg-CQHqY34Gy2NRAgtaB9q8MPetaFlBCzD-Z2m9uC7fyWNqGhdjH2z0IMflbr-35ms/exec";
 
-    WEBAPP: "https://feedback-api.feedbackqsnich.workers.dev"
+// ==============================
+// FEEDBACK CACHE
+// ==============================
 
-};
+const CACHE_KEY = "feedbackDataCache";
+const CACHE_DURATION = 5 * 60 * 1000; // 5 นาที
 
-/* ==========================================
-   Fetch
-========================================== */
+let feedbackMemoryCache = null;
+let feedbackFetchPromise = null;
 
-async function api(action, data = {}) {
 
-    const controller = new AbortController();
+// ==============================
+// อ่าน Cache
+// ==============================
 
-    const timeout = setTimeout(() => {
-        controller.abort();
-    }, 30000);
+function getCachedFeedback() {
+
+    // Memory Cache
+    if (feedbackMemoryCache) {
+        return feedbackMemoryCache;
+    }
+
+    // Session Cache
+    try {
+        const cached = sessionStorage.getItem(CACHE_KEY);
+
+        if (cached) {
+            const parsed = JSON.parse(cached);
+
+            if (parsed && Array.isArray(parsed.data)) {
+                feedbackMemoryCache = parsed;
+                return parsed;
+            }
+        }
+    } catch (error) {
+        console.warn("อ่าน Cache ไม่สำเร็จ:", error);
+    }
+
+    return null;
+}
+
+
+// ==============================
+// บันทึก Cache
+// ==============================
+
+function saveFeedbackCache(data) {
+
+    const cache = {
+        data: data,
+        timestamp: Date.now()
+    };
+
+    feedbackMemoryCache = cache;
 
     try {
+        sessionStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+    } catch (error) {
+        console.warn("บันทึก Cache ไม่สำเร็จ:", error);
+    }
+}
 
-        const response = await fetch(API.WEBAPP, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                action,
-                ...data
-            }),
-            signal: controller.signal
-        });
 
-        if (!response.ok) {
-            throw new Error(`เซิร์ฟเวอร์ตอบกลับผิดพลาด (${response.status})`);
+// ==============================
+// ดึงข้อมูลจาก API
+// ==============================
+
+async function fetchFeedbackFromAPI() {
+
+    console.log("กำลังเรียก API:", API_URL);
+
+    const response = await fetch(API_URL);
+
+    console.log("API Status:", response.status);
+
+    if (!response.ok) {
+        throw new Error("ไม่สามารถเชื่อมต่อ API ได้");
+    }
+
+    const result = await response.json();
+
+    console.log("API Result:", result);
+
+    if (!result.success) {
+        throw new Error(result.message || "ไม่สามารถดึงข้อมูลได้");
+    }
+
+    console.log("จำนวนข้อมูลทั้งหมด:", result.total);
+
+    saveFeedbackCache(result.data);
+
+    return result.data;
+}
+
+
+// ==============================
+// GET FEEDBACK DATA
+// ==============================
+
+async function getFeedbackData() {
+
+    const cached = getCachedFeedback();
+
+    // มี Cache → ส่งข้อมูลทันที ไม่ต้องรอ
+    if (cached) {
+
+        console.log("ใช้ข้อมูลจาก Cache:", cached.data.length, "รายการ");
+
+        // Cache หมดอายุ → อัปเดตเบื้องหลัง
+        const isExpired =
+            Date.now() - cached.timestamp > CACHE_DURATION;
+
+        if (isExpired) {
+
+            console.log("Cache หมดอายุ กำลังอัปเดตเบื้องหลัง");
+
+            if (!feedbackFetchPromise) {
+                feedbackFetchPromise = fetchFeedbackFromAPI()
+                    .catch(error => {
+                        console.error("อัปเดต Cache ไม่สำเร็จ:", error);
+                    })
+                    .finally(() => {
+                        feedbackFetchPromise = null;
+                    });
+            }
         }
 
-        return await response.json();
+        return cached.data;
+    }
 
-    } catch (err) {
+    // ไม่มี Cache → โหลด API ครั้งแรก
+    if (!feedbackFetchPromise) {
+        feedbackFetchPromise = fetchFeedbackFromAPI();
+    }
 
-        if (err.name === "AbortError") {
-            throw new Error("การเชื่อมต่อใช้เวลานานเกินไป กรุณาลองใหม่อีกครั้ง");
-        }
-
-        throw err;
-
+    try {
+        return await feedbackFetchPromise;
     } finally {
-
-        clearTimeout(timeout);
-
+        feedbackFetchPromise = null;
     }
-}
-
-/* ==========================================
-   Preload Departments
-========================================== */
-
-let departmentsPromise = null;
-
-async function preloadDepartments() {
-
-    // ถ้ามีข้อมูลแล้ว ไม่ต้องเรียก API
-    if (departments.length) {
-        return departments;
-    }
-
-    // ถ้ามี request กำลังโหลดอยู่ ให้รอ request เดิม
-    if (departmentsPromise) {
-        return departmentsPromise;
-    }
-
-    departmentsPromise = api("getLocationData")
-        .then(result => {
-
-            departments = result.departments || [];
-
-            return departments;
-
-        })
-        .catch(err => {
-
-            console.error(err);
-
-            departmentsPromise = null;
-
-            throw err;
-
-        });
-
-    return departmentsPromise;
-}
-
-/* ==========================================
-   Upload Image
-========================================== */
-
-async function uploadImage(base64, mimeType) {
-
-    return await api("uploadImage", {
-
-        base64,
-
-        mimeType
-
-    });
-
-}
-
-/* ==========================================
-   Save Feedback
-========================================== */
-
-async function saveFeedback(data) {
-
-    return await api("saveFeedback", {
-
-        data
-
-    });
-
 }

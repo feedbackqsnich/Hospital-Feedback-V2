@@ -1,0 +1,220 @@
+/* ==========================================
+   RESPONSIVE
+   Feedback QSNICH Report v2.0
+========================================== */
+
+@media (max-width:992px) {
+
+    .summary-section {
+
+        grid-template-columns: repeat(2, 1fr);
+
+    }
+
+    .dashboard-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+@media (max-width:768px) {
+
+    .container {
+
+        padding: 20px 14px 40px;
+
+    }
+
+    .hero {
+
+        flex-direction: column;
+
+        text-align: center;
+
+        gap: 24px;
+
+    }
+
+    .hero-left {
+
+        flex-direction: column;
+
+        gap: 16px;
+
+    }
+
+    .hero-logo {
+
+        width: 72px;
+
+    }
+
+    .hero-title h1 {
+
+        font-size: 30px;
+
+    }
+
+    .hero-title h2 {
+
+        font-size: 18px;
+
+    }
+
+    .hero-right {
+
+        width: 100%;
+
+    }
+
+    .update-card {
+
+        width: 100%;
+
+        max-width: 320px;
+
+        margin: auto;
+
+    }
+
+    .dashboard-filter {
+
+        justify-content: center;
+
+        flex-wrap: wrap;
+
+        gap: 16px;
+
+    }
+
+    .filter-item {
+
+        width: 100%;
+
+        justify-content: center;
+
+    }
+
+    .pie-layout {
+
+        flex-direction: column;
+
+        gap: 20px;
+
+    }
+
+    .pie-container {
+
+        width: 200px;
+
+        height: 200px;
+
+    }
+
+    .pie-legend {
+
+        width: 100%;
+
+    }
+
+    .legend-item {
+
+        grid-template-columns: 18px 1fr 55px;
+
+    }
+
+}
+
+@media (max-width:600px) {
+
+    .summary-section {
+
+        grid-template-columns: 1fr;
+
+        gap: 16px;
+
+    }
+
+    .summary-card {
+
+        padding: 20px;
+
+    }
+
+    .summary-icon {
+
+        width: 56px;
+
+        height: 56px;
+
+    }
+
+    .summary-icon .material-symbols-rounded {
+
+        font-size: 30px;
+
+    }
+
+    .summary-value {
+
+        font-size: 40px;
+
+    }
+
+    .pie-container {
+
+        max-width: 240px;
+
+        height: 240px;
+
+    }
+
+    .card {
+
+        padding: 18px;
+
+    }
+
+}
+
+/* ========================================
+   FEEDBACK ANIMATION
+======================================== */
+
+.feedback-item {
+    animation: feedbackEnter 0.35s ease both;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.feedback-item:hover {
+    transform: translateY(-2px);
+}
+
+@keyframes feedbackEnter {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ทยอยแสดงรายการ */
+.feedback-item:nth-child(1)  { animation-delay: 0ms; }
+.feedback-item:nth-child(2)  { animation-delay: 35ms; }
+.feedback-item:nth-child(3)  { animation-delay: 70ms; }
+.feedback-item:nth-child(4)  { animation-delay: 105ms; }
+.feedback-item:nth-child(5)  { animation-delay: 140ms; }
+.feedback-item:nth-child(6)  { animation-delay: 175ms; }
+.feedback-item:nth-child(7)  { animation-delay: 210ms; }
+.feedback-item:nth-child(8)  { animation-delay: 245ms; }
+.feedback-item:nth-child(9)  { animation-delay: 280ms; }
+.feedback-item:nth-child(10) { animation-delay: 315ms; }
+
